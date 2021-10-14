@@ -1,10 +1,16 @@
-.FormBody{
+.FormLayout{
 	width: 400px;
     background: white;
     min-height: 100px;
 	box-shadow: 0px 5px 25px -15px black;
 	margin-top: 200px;
 	position: relative;
+
+	>hr{
+		border-color: blueviolet;
+		width: 25%;
+		margin: 12px auto;
+	}
 }
 .Login{
 	transform: translateY(-20%);
@@ -24,8 +30,9 @@
     background-color: blueviolet;
     position: relative;
     margin: auto;
+	margin-top: -60px;
     left: 50%;
-    transform: translate(-50%, -50%);
+    transform: translateX(-50%);
     border-radius: 50%;
 	
 	div{
@@ -43,4 +50,13 @@
 		max-height: 70%;
 		max-width: 70%;
 	}
+	
+}
+.taskCutiveImage{
+	height: 60px;
+    width: 100%;
+    background-position: center;
+    background-size: 55%;
+    // background-color: red;
+    background-repeat: no-repeat;
 }

@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react'
-import FormLayout from '../components/FormLayout/FormLayout'
-import TaskLayout from '../components/TasksLayout/TasksLayout'
-import Loading from './../components/Loading/Loading'
+import FormLayout from '../FormLayout/FormLayout'
+import TaskLayout from '../TasksLayout/TasksLayout'
+import Loading from '../Loading/Loading'
 import clssses from'./App.module.scss'
-import {Switch, Route, Redirect, useHistory} from 'react-router-dom'
+import {Switch, Route, Redirect} from 'react-router-dom'
 import {connect} from 'react-redux'
-import * as actions from './../store/actions/index'
-import NotFound from './../components/NotFound/NotFound'
-import {axiosAuth, refreshAccessToken} from './../axios'
-import Backdrop from './../components/UI/Backdrop/Backdrop'
+import * as actions from '../../store/actions/index'
+import {refreshAccessToken} from '../../axios'
+import Backdrop from '../UI/Backdrop/Backdrop'
+import WaitLoader from '../UI/WaitLoader/WaitLoader'
 
 const App = props => {
-	let history = useHistory()
 	const loginData = useState(null)
+
 	// console.log('[App]', {...props} )
 	// console.log( props.loadApp, props.isLoggedIn )
 	// console.log(props.backdrop)
@@ -51,40 +51,12 @@ const App = props => {
 					window.alert('Something went wrong')
 				}
 			})
-
-		// loginData[1](0)
-		// if(!props.isLoggedIn){
-		// 	const refreshToken = localStorage.getItem('task-cutive-token');
-		// 	if(refreshToken){
-		// 		props.refreshToken(refreshToken, history)
-		// 	}
-		// 	else{
-		// 		props.updateLoadApp(true)
-		// 	}
-		// 	// props.updateLoggedIn(true, history)
-		// }
-		// console.log(history)
-		// console.log("[App] useEffect")
-		// console.log(props.isLoggedIn)
-	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
-
-
-	// return (
-	// 	<>
-	// 		<Switch>
-	// 			<Route path="/" exact>/</Route>
-	// 			<Route path="/a">a</Route>
-	// 			<Route path="/b">b
-	// 				<Route path="/b/:x">/1</Route>
-	// 			</Route>
-	// 			<Route path="/c">c</Route>
-	// 		</Switch>
-	// 	</>
-	// )
 
 	return (
 		<div className={clssses.App}>
+			{props.waitLoader.show && (<WaitLoader message={props.waitLoader.message}/>)}
+
 			{ !props.loadApp ? (
 					<Loading/>
 				) : (
@@ -149,13 +121,15 @@ const mapStateToProps = state => {
 		isLoggedIn: state.auth.isLoggedIn,
 		loadApp: state.auth.loadApp,
 		user: state.auth.user,
-		backdrop: state.backdrop
+		backdrop: state.backdrop,
+		waitLoader: state.waitLoader
 	}
 }
 const mapDispatchToProps = dispatch => {
 	return {
 		updateAuth: (...args) => dispatch( actions.updateAuth(...args) ),
 		updateLoadApp: (...args) => dispatch( actions.updateLoadApp(...args) ),
+		updateWaitLoader: (...args) => dispatch( actions.updateWaitLoader(...args) ),
 		// refreshToken: (...args) => dispatch( actions.refreshToken(...args) )
 	}
 }

@@ -1,39 +1,62 @@
-# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
-
-name: Node.js CI
+##### github-actions #####
+name: Deploy Task-Cutive to Production
 
 on:
   push:
-    branches: [master]
+    branches: ["main"]
   pull_request:
-    branches: [master]
-  workflow_dispatch:
+    branches: ["main"]
 
 jobs:
-  build:
-    runs-on: self-hosted
-
-    strategy:
-      matrix:
-        node-version: [16.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+  building-and-deploy:
+    name: Build and Push to Registry
+    runs-on: ubuntu-22.04
 
     steps:
-      - uses: actions/checkout@v3
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure SSH Credentials
+        uses: rajpal-se/configure-ssh-credentials@v1
         with:
-          node-version: ${{ matrix.node-version }}
-          cache: "npm"
+          hostname: ${{ secrets.VPS_IP_ADDRESS }}
+          key: ${{ secrets.VPS_USER_SSH_KEY }}
 
-      - name: Install Step
-        run: npm i
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
 
-      - name: Build Step
-        env:
-          CI: false
-        run: npm run build --if-present
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
 
-      # - name: Testing Step
-      #   run: npm run test --if-present
+      - name: Download files
+        run: |
+          ssh -F .tmp/.ssh/config github-actions "echo 'Downloading files...'"
+          copy_files="/server/projects/rajpal/task-cutive-api/files/{.env.production,Dockerfile.prod,.dockerignore}"
+          scp -F .tmp/.ssh/config -o StrictHostKeyChecking=no github-actions:$copy_files .
+
+      - name: Build Docker image
+        run: docker build -f Dockerfile.prod -t ${{ secrets.AWS_ECR_REPOSITORY_URL_PROD }}:latest .
+
+      - name: Push Docker image to AWS ECR
+        run: docker push ${{ secrets.AWS_ECR_REPOSITORY_URL_PROD }}:latest
+
+      - name: Deploy Docker Container
+        uses: rajpal-se/deploy-docker-container@v3
+        with:
+          aws-account-number: ${{ secrets.AWS_ACCOUNT_NUMBER }}
+          aws-ecr-region: ${{ secrets.AWS_DEFAULT_REGION }}
+          aws-ecr-repository: ${{ secrets.AWS_ECR_REPOSITORY_PROD }}
+          app-container-name: ${{ secrets.APP_CONTAINER_NAME }}
+          app-port-mapping: ${{ secrets.APP_PORT_MAPPING }}
+          app-container-ip: ${{ secrets.APP_CONTAINER_IP }}
+
+      - name: Remove Dangling Docker Images
+        uses: rajpal-se/cleanup-docker@v1
+        with:
+          aws-ecr-repository: ${{ secrets.AWS_ECR_REPOSITORY_PROD }}
+          aws-ecr-region: ${{ secrets.AWS_DEFAULT_REGION }}

@@ -3,9 +3,13 @@ name: Deploy Task-Cutive to Production
 
 on:
   push:
-    branches: ["main"]
+    branches:
+      - main
   pull_request:
-    branches: ["main"]
+    branches:
+      - main
+  workflow_dispatch:
+
 
 jobs:
   building-and-deploy:

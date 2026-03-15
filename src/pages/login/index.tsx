@@ -2,8 +2,15 @@ import { Box, Button, Typography, Divider, styled } from "@mui/material";
 import AuthLayout from "../../components/auth-layout";
 import { EmailField } from "../../components/styled/email-field";
 import { PasswordField } from "../../components/styled/password-field";
+import { useNavigate } from "react-router";
 
 export default function Login() {
+    const navigate = useNavigate();
+    const handleSignup = () => {
+        // Handle signup logic here
+        navigate("/signup");
+    };
+
     return (
         <AuthLayout>
             <LoginContainer>
@@ -36,6 +43,7 @@ export default function Login() {
                                 type="button"
                                 variant="outlined"
                                 color="secondary"
+                                onClick={handleSignup}
                             >
                                 Create New Account
                             </Button>
@@ -68,6 +76,6 @@ const LoginContainer = styled(Box)(({ theme }) => ({
         padding: theme.spacing(2),
     },
     ".divider": {
-        width: "80%",
+        width: "100%",
     },
 }));

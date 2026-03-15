@@ -1,7 +1,7 @@
-export default function Signup() {
+export default function Home() {
     return (
-        <div className="signup">
-            <h1>Signup</h1>
+        <div className="home">
+            <h1>Home</h1>
         </div>
     );
 }

@@ -4,6 +4,7 @@ import App from "../app";
 import Login from "../pages/login";
 import Signup from "../pages/signup";
 import ResetPassword from "../pages/reset-password";
+import routes from "./routes";
 
 const router = createBrowserRouter([
     {
@@ -11,21 +12,21 @@ const router = createBrowserRouter([
         Component: App,
         children: [
             {
-                path: "/",
+                path: routes.home,
                 Component: Home,
             },
         ],
     },
     {
-        path: "/login",
+        path: routes.login,
         Component: Login,
     },
     {
-        path: "/signup",
+        path: routes.signup,
         Component: Signup,
     },
     {
-        path: "/reset-password",
+        path: routes.resetPassword,
         Component: ResetPassword,
     },
 ]);

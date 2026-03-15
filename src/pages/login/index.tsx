@@ -1,12 +1,4 @@
-import {
-    Box,
-    Button,
-    TextField,
-    Typography,
-    Link,
-    Divider,
-    styled,
-} from "@mui/material";
+import { Box, Button, Typography, Divider, styled } from "@mui/material";
 import AuthLayout from "../../components/auth-layout";
 import { EmailField } from "../../components/styled/email-field";
 import { PasswordField } from "../../components/styled/password-field";
@@ -20,49 +12,34 @@ export default function Login() {
                 </Typography>
 
                 <Box>
-                    <Box component="form" noValidate sx={{ mt: 1 }}>
-                        <EmailField />
-                        <PasswordField />
-
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            sx={{
-                                mt: 3,
-                                mb: 2,
-                                bgcolor: "#8e24aa",
-                                "&:hover": { bgcolor: "#7b1fa2" },
-                                textTransform: "none",
-                                fontSize: "1.1rem",
-                            }}
-                        >
-                            Login
-                        </Button>
-
-                        <Link
-                            href="#"
-                            variant="body2"
-                            sx={{ color: "#3f51b5", textDecoration: "none" }}
-                        >
-                            Forgot Password?
-                        </Link>
-
-                        <Divider sx={{ my: 3 }} />
-
-                        <Button
-                            fullWidth
-                            variant="contained"
-                            sx={{
-                                bgcolor: "#00a800",
-                                "&:hover": { bgcolor: "#008a00" },
-                                textTransform: "none",
-                                fontWeight: "bold",
-                                py: 1.5,
-                            }}
-                        >
-                            Create New Account
-                        </Button>
+                    <Box component="form" noValidate sx={{ mt: 1 }} gap={2}>
+                        <Box className="formTop">
+                            <EmailField />
+                            <PasswordField />
+                            <Button
+                                type="submit"
+                                variant="contained"
+                                style={{
+                                    alignSelf: "center",
+                                    margin: "4px 0px",
+                                }}
+                            >
+                                Login
+                            </Button>
+                        </Box>
+                        <Box className="formBottom">
+                            <Button type="button" variant="text">
+                                Forgot Password?
+                            </Button>
+                            <Divider className="divider" />
+                            <Button
+                                type="button"
+                                variant="outlined"
+                                color="secondary"
+                            >
+                                Create New Account
+                            </Button>
+                        </Box>
                     </Box>
                 </Box>
             </LoginContainer>
@@ -75,5 +52,22 @@ const LoginContainer = styled(Box)(({ theme }) => ({
         color: theme.palette.primary.main,
         mb: 3,
         fontWeight: 500,
+    },
+    ".formTop": {
+        display: "flex",
+        flexDirection: "column",
+        gap: theme.spacing(2),
+        padding: theme.spacing(2),
+    },
+    ".formBottom": {
+        width: "100%",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        gap: theme.spacing(2),
+        padding: theme.spacing(2),
+    },
+    ".divider": {
+        width: "80%",
     },
 }));

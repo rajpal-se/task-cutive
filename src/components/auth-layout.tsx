@@ -4,7 +4,7 @@ import type { PropsWithChildren } from "react";
 export default function AuthLayout(props: PropsWithChildren) {
     return (
         <AuthLayoutRoot>
-            <Paper elevation={3}>
+            <Paper elevation={3} className="paper">
                 <Avatar
                     className="logo"
                     src="/favicon/logo-transparent-192x192.png"
@@ -33,7 +33,7 @@ const AuthLayoutRoot = styled(Box)(({ theme }) => ({
         textAlign: "center",
         borderRadius: 20,
 
-        ".logo": {
+        ">.logo": {
             width: 80,
             height: 80,
             padding: 12,
@@ -42,12 +42,12 @@ const AuthLayoutRoot = styled(Box)(({ theme }) => ({
             borderRadius: "50%",
             border: `3px solid ${theme.palette.primary.main}`,
         },
-        ".text": {
+        ">.text": {
             fontFamily: "cursive",
             color: theme.palette.primary.main,
             fontWeight: "bold",
         },
-        ".divider": {
+        ">.divider": {
             margin: "12px auto",
             width: "40%",
             borderBottomWidth: 2,

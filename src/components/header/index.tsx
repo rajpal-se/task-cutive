@@ -1,7 +1,10 @@
-import { Box, Paper, styled } from "@mui/material";
+import { Box, styled } from "@mui/material";
 import { config } from "../../config";
 import AppAutoContainer from "../app-auto-container";
 import { useLocation, useNavigate } from "react-router";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
+import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 
 export default function Header() {
     const navigate = useNavigate();
@@ -18,7 +21,14 @@ export default function Header() {
             <AppAutoContainer>
                 <HeaderContainer>
                     <Box className="logo" onClick={handleLogoClick}>
-                        {config.appName}
+                        <Box>{config.appName}</Box>
+                    </Box>
+                    <Box className="add">
+                        <AddCircleOutlineIcon />
+                    </Box>
+                    <Box className="actions">
+                        <AccountCircleOutlinedIcon />
+                        <LogoutOutlinedIcon />
                     </Box>
                 </HeaderContainer>
             </AppAutoContainer>
@@ -39,16 +49,54 @@ const HeaderContainer = styled(Box)(({ theme }) => ({
     display: "flex",
     alignItems: "center",
     padding: "0px 16px",
+    userSelect: "none",
+
+    ">div": {
+        display: "flex",
+        alignItems: "center",
+        flex: 1,
+        color: theme.palette.common.white,
+
+        svg: {
+            cursor: "pointer",
+            fontSize: "2rem",
+            padding: "2px",
+            borderRadius: "8px",
+            transition: "background-color 0.3s ease",
+            position: "relative",
+
+            "&:hover": {
+                backgroundColor: theme.palette.primary.dark,
+            },
+
+            "&:active": {
+                backgroundColor: theme.palette.primary.dark,
+                opacity: 0.9,
+                top: "1px",
+            },
+        },
+    },
 
     ".logo": {
-        backgroundColor: theme.palette.primary.main,
-        padding: theme.spacing(1),
-        fontSize: "1.5rem",
-        fontFamily: "cursive",
-        fontWeight: 500,
-        // border: "1px solid red",
-        color: theme.palette.common.white,
-        borderRadius: "8px",
-        cursor: "pointer",
+        div: {
+            flexShrink: 0,
+            padding: theme.spacing(1),
+            fontSize: "1.5rem",
+            fontFamily: "cursive",
+            fontWeight: 500,
+            color: theme.palette.common.white,
+            borderRadius: "8px",
+            cursor: "pointer",
+        },
+    },
+    ".add": {
+        justifyContent: "center",
+        svg: {
+            fontSize: "2.5rem",
+        },
+    },
+    ".actions": {
+        justifyContent: "flex-end",
+        gap: theme.spacing(3),
     },
 }));

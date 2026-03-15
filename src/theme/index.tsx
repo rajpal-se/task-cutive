@@ -36,6 +36,19 @@ const theme = createTheme({
                 },
             },
         },
+        // MuiInputAdornment: {
+        //     styleOverrides: {
+        //         root: ({ theme: muiTheme }) => ({
+        //             color: muiTheme.palette.primary.main,
+        //             "& .MuiIconButton-root": {
+        //                 color: "inherit",
+        //             },
+        //             "& .MuiSvgIcon-root": {
+        //                 color: "inherit",
+        //             },
+        //         }),
+        //     },
+        // },
     },
 });
 

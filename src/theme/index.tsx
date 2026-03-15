@@ -3,11 +3,11 @@ import { createTheme } from "@mui/material/styles";
 const theme = createTheme({
     palette: {
         primary: {
-            main: "#8a2be2", // Brand Purple
+            main: "#8a2be2",
             contrastText: "#fff",
         },
         secondary: {
-            main: "#00a800", // Brand Green
+            main: "#00a800",
             contrastText: "#fff",
         },
         background: {
@@ -30,22 +30,23 @@ const theme = createTheme({
         MuiOutlinedInput: {
             styleOverrides: {
                 root: {
-                    height: 48, // Industry standard height
+                    height: 42,
                     borderRadius: 8,
                     backgroundColor: "#fff",
                 },
                 input: {
-                    padding: "12px 14px",
+                    padding: "9px 14px",
+                    fontSize: "0.95rem",
                 },
             },
         },
         MuiInputLabel: {
             styleOverrides: {
                 root: {
-                    // Centers the label vertically in the 48px box
                     transform: "translate(14px, 12px) scale(1)",
+                    fontSize: "0.9rem",
                     "&.MuiInputLabel-shrink": {
-                        transform: "translate(14px, -9px) scale(0.75)",
+                        transform: "translate(14px, -8px) scale(0.75)",
                     },
                 },
             },
@@ -53,10 +54,11 @@ const theme = createTheme({
         MuiButton: {
             styleOverrides: {
                 root: {
-                    height: 48, // Matching button height for symmetry
-                    borderRadius: 4,
+                    height: 42,
+                    borderRadius: 8,
                     textTransform: "none",
                     fontWeight: 600,
+                    padding: "6px 22px",
                 },
             },
         },
@@ -65,7 +67,7 @@ const theme = createTheme({
                 root: ({ theme: muiTheme }) => ({
                     color: muiTheme.palette.primary.main,
                     "& .MuiSvgIcon-root": {
-                        fontSize: "1.25rem",
+                        fontSize: "1.1rem",
                     },
                 }),
             },

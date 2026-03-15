@@ -1,32 +1,26 @@
 import { Box, Button, Typography, Divider, styled } from "@mui/material";
 import AuthLayout from "../../components/auth-layout";
 import { EmailField } from "../../components/styled/email-field";
-import { PasswordField } from "../../components/styled/password-field";
 import { useNavigate } from "react-router";
 
-export default function Login() {
+export default function ResetPassword() {
     const navigate = useNavigate();
 
-    const handleSignup = () => {
-        navigate("/signup");
-    };
-
-    const handleForgotPassword = () => {
-        navigate("/reset-password");
+    const handleLogin = () => {
+        navigate("/login");
     };
 
     return (
         <AuthLayout>
-            <LoginContainer>
+            <ResetPasswordContainer>
                 <Typography variant="h5" className="heading">
-                    Login
+                    Reset Password
                 </Typography>
 
                 <Box>
                     <Box component="form" noValidate sx={{ mt: 1 }} gap={2}>
                         <Box className="formTop">
                             <EmailField label="Email" />
-                            <PasswordField label="Password" />
                             <Button
                                 type="submit"
                                 variant="contained"
@@ -35,35 +29,27 @@ export default function Login() {
                                     margin: "4px 0px",
                                 }}
                             >
-                                Login
+                                Reset Password
                             </Button>
                         </Box>
                         <Box className="formBottom">
-                            <Button
-                                type="button"
-                                variant="text"
-                                onClick={handleForgotPassword}
-                            >
-                                Forgot Password?
-                            </Button>
                             <Divider className="divider" />
                             <Button
                                 type="button"
-                                variant="outlined"
-                                color="secondary"
-                                onClick={handleSignup}
+                                variant="text"
+                                onClick={handleLogin}
                             >
-                                Create New Account
+                                Go Back
                             </Button>
                         </Box>
                     </Box>
                 </Box>
-            </LoginContainer>
+            </ResetPasswordContainer>
         </AuthLayout>
     );
 }
 
-const LoginContainer = styled(Box)(({ theme }) => ({
+const ResetPasswordContainer = styled(Box)(({ theme }) => ({
     ".heading": {
         color: theme.palette.primary.main,
         mb: 3,

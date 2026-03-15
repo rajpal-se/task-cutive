@@ -7,6 +7,7 @@ import { TextField } from "../../components/styled/text-field";
 
 export default function Signup() {
     const navigate = useNavigate();
+
     const handleLogin = () => {
         navigate("/login");
     };

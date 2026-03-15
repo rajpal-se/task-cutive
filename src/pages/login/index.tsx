@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import AuthLayout from "../../components/auth-layout";
 import { EmailField } from "../../components/styled/email-field";
+import { PasswordField } from "../../components/styled/password-field";
 
 export default function Login() {
     return (
@@ -21,17 +22,7 @@ export default function Login() {
                 <Box>
                     <Box component="form" noValidate sx={{ mt: 1 }}>
                         <EmailField />
-                        <TextField
-                            margin="normal"
-                            required
-                            fullWidth
-                            name="password"
-                            label="Password"
-                            type="password"
-                            id="password"
-                            autoComplete="current-password"
-                            color="secondary"
-                        />
+                        <PasswordField />
 
                         <Button
                             type="submit"

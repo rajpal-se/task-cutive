@@ -3,11 +3,11 @@ import AuthLayout from "../../components/auth-layout";
 import { EmailField } from "../../components/styled/email-field";
 import { PasswordField } from "../../components/styled/password-field";
 import { useNavigate } from "react-router";
+import { TextField } from "../../components/styled/text-field";
 
 export default function Signup() {
     const navigate = useNavigate();
     const handleLogin = () => {
-        // Handle login logic here
         navigate("/login");
     };
 
@@ -27,11 +27,11 @@ export default function Signup() {
                         className="form"
                     >
                         <Box className="nameRow">
-                            <EmailField />
-                            <EmailField />
+                            <TextField label="First Name" />
+                            <TextField label="Last Name" />
                         </Box>
-                        <EmailField />
-                        <PasswordField />
+                        <EmailField label="Email" />
+                        <PasswordField label="Password" />
                         <Button
                             type="submit"
                             variant="contained"

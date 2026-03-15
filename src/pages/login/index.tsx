@@ -21,7 +21,7 @@ export default function Login() {
                 <Box>
                     <Box component="form" noValidate sx={{ mt: 1 }} gap={2}>
                         <Box className="formTop">
-                            <EmailField />
+                            <EmailField label="Email" />
                             <PasswordField label="Password" />
                             <Button
                                 type="submit"

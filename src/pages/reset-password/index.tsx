@@ -1,48 +1,31 @@
-import { Box, Button, Typography, Divider, styled } from "@mui/material";
+import { Box, Button, Divider, styled } from "@mui/material";
 import AuthLayout from "../../components/auth-layout";
-import { EmailField } from "../../components/styled/email-field";
 import { useNavigate } from "react-router";
+import ResetPasswordUi from "./reset-ui";
+import { useState } from "react";
+import VerifyOtpUi from "./verify-otp-ui";
 
 export default function ResetPassword() {
+    const [verifyOtp, setVerifyOtp] = useState(false);
     const navigate = useNavigate();
 
     const handleLogin = () => {
-        navigate("/login");
+        navigate("/login", { replace: true });
     };
 
     return (
         <AuthLayout>
             <ResetPasswordContainer>
-                <Typography variant="h5" className="heading">
-                    Reset Password
-                </Typography>
-
-                <Box>
-                    <Box component="form" noValidate sx={{ mt: 1 }} gap={2}>
-                        <Box className="formTop">
-                            <EmailField label="Email" />
-                            <Button
-                                type="submit"
-                                variant="contained"
-                                style={{
-                                    alignSelf: "center",
-                                    margin: "4px 0px",
-                                }}
-                            >
-                                Reset Password
-                            </Button>
-                        </Box>
-                        <Box className="formBottom">
-                            <Divider className="divider" />
-                            <Button
-                                type="button"
-                                variant="text"
-                                onClick={handleLogin}
-                            >
-                                Go Back
-                            </Button>
-                        </Box>
-                    </Box>
+                {verifyOtp ? (
+                    <VerifyOtpUi />
+                ) : (
+                    <ResetPasswordUi setVerifyOtp={setVerifyOtp} />
+                )}
+                <Box className="formBottom">
+                    <Divider className="divider" />
+                    <Button type="button" variant="text" onClick={handleLogin}>
+                        Go Back
+                    </Button>
                 </Box>
             </ResetPasswordContainer>
         </AuthLayout>
@@ -50,17 +33,6 @@ export default function ResetPassword() {
 }
 
 const ResetPasswordContainer = styled(Box)(({ theme }) => ({
-    ".heading": {
-        color: theme.palette.primary.main,
-        mb: 3,
-        fontWeight: 500,
-    },
-    ".formTop": {
-        display: "flex",
-        flexDirection: "column",
-        gap: theme.spacing(2),
-        padding: theme.spacing(2),
-    },
     ".formBottom": {
         width: "100%",
         display: "flex",

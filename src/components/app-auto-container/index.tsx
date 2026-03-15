@@ -3,13 +3,15 @@ import { Box, styled, type SxProps } from "@mui/material";
 export default function AppAutoContainer({
     children,
     sx,
+    className = "wrapper",
 }: {
+    className?: string;
     children: React.ReactNode;
     sx?: SxProps;
 }) {
     const { ...restSx } = sx || {};
     return (
-        <AppAutoContainerWrapper sx={{ ...restSx }}>
+        <AppAutoContainerWrapper className={className} sx={{ ...restSx }}>
             {children}
         </AppAutoContainerWrapper>
     );

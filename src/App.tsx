@@ -1,17 +1,12 @@
-import { Link } from "react-router";
+import { Outlet } from "react-router";
 import classses from "./app.module.scss";
+import Header from "./components/header";
 
 export default function App() {
     return (
         <div className={classses.root}>
-            <div>Header</div>
-            <div>
-                Body
-                <hr />
-                <Link to="/">Home</Link>
-                <Link to="/login">Login</Link>
-                <Link to="/signup">Signup</Link>
-            </div>
+            <Header />
+            <Outlet />
         </div>
     );
 }

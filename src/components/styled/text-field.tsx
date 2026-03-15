@@ -1,4 +1,4 @@
-import React from "react";
+import { forwardRef } from "react";
 import {
     TextField as MuiTextField,
     type TextFieldProps as MuiTextFieldProps,
@@ -6,7 +6,7 @@ import {
 
 export type TextFieldProps = Omit<MuiTextFieldProps, "variant">;
 
-export const TextField = React.forwardRef<HTMLDivElement, TextFieldProps>(
+export const TextField = forwardRef<HTMLDivElement, TextFieldProps>(
     (props, ref) => {
         const {
             autoComplete = "off",

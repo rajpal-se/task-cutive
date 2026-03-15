@@ -59,14 +59,14 @@ const TaskCardContainer = styled(Box)<{ isCompeleted: boolean }>(
         boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
 
         ".calender-card": {
-            marginRight: "16px",
+            margin: "auto 8px",
         },
         ".task-info": {
             flexGrow: 1,
             display: "flex",
             flexDirection: "column",
             gap: "6px",
-            backgroundColor: "#f9f9f9",
+            // backgroundColor: "#f9f9f9",
             padding: "4px 8px",
 
             ">h3, >p, >div": {

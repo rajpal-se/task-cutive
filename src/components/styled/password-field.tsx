@@ -36,12 +36,12 @@ export const PasswordField = React.forwardRef<
 
     return (
         <TextField
-            {...rest}
             ref={ref}
             required={required}
             fullWidth={fullWidth}
             autoComplete={autoComplete}
             type={showPassword ? "text" : "password"}
+            {...rest}
             slotProps={{
                 ...slotProps,
                 input: {

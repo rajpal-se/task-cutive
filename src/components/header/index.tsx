@@ -39,8 +39,6 @@ export default function Header() {
 const HeaderRoot = styled("header")(({ theme }) => ({
     backgroundColor: theme.palette.primary.main,
     height: "60px",
-    margin: "0 auto",
-    display: "flex",
 }));
 
 const HeaderContainer = styled(Box)(({ theme }) => ({

@@ -23,12 +23,11 @@ export default function Login() {
                 </Typography>
 
                 <Box>
-                    <Box component="form" noValidate sx={{ mt: 1 }} gap={2}>
+                    <Box sx={{ mt: 1 }} gap={2}>
                         <Box className="formTop">
                             <EmailField label="Email" />
                             <PasswordField label="Password" />
                             <Button
-                                type="submit"
                                 variant="contained"
                                 style={{
                                     alignSelf: "center",

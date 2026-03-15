@@ -20,13 +20,7 @@ export default function Signup() {
                 </Typography>
 
                 <Box>
-                    <Box
-                        component="form"
-                        noValidate
-                        sx={{ mt: 1 }}
-                        gap={2}
-                        className="form"
-                    >
+                    <Box className="form">
                         <Box className="nameRow">
                             <TextField label="First Name" />
                             <TextField label="Last Name" />
@@ -73,6 +67,7 @@ const SignupContainer = styled(Box)(({ theme }) => ({
         flexDirection: "column",
         gap: theme.spacing(2),
         padding: theme.spacing(2),
+        mt: theme.spacing(1),
     },
     ".nameRow": {
         display: "flex",

@@ -8,15 +8,7 @@ export function useSignup(
     options?: UseMutationOptions<SignupResponse, Error, SignupFormValues>,
 ) {
     return useMutation<SignupResponse, Error, SignupFormValues>({
-        mutationFn: async (payload) => {
-            const response = await signupApi(payload);
-
-            if (!response) {
-                throw new Error("Signup failed");
-            }
-
-            return response;
-        },
+        mutationFn: signupApi,
         ...options,
     });
 }

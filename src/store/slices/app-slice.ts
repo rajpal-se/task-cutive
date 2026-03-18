@@ -9,7 +9,7 @@ import type { RootState } from "..";
 export const appSlice = createSlice({
     name: RTK.sliceName.app,
     initialState: {
-        isAppLoading: true,
+        isAppLoading: false,
     },
     reducers: {
         setIsAppLoading(state, action: PayloadAction<boolean>) {

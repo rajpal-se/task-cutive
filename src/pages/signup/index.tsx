@@ -7,9 +7,12 @@ import { TextField } from "../../components/styled/text-field";
 import { Controller, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { signupFormSchema, type SignupFormValues } from "../../schemas";
+import { useSignup } from "../../apis";
+import { toast } from "sonner";
 
 export default function Signup() {
     const navigate = useNavigate();
+    const { mutateAsync: signup, isPending } = useSignup();
 
     const {
         control,
@@ -30,7 +33,17 @@ export default function Signup() {
     };
 
     const onSubmit = async (data: SignupFormValues) => {
-        console.log("signup payload", data);
+        try {
+            const response = await signup(data);
+            if (response?.success) {
+                toast.success("Signup successful. Redirecting to login...");
+                navigate("/login");
+            }
+        } catch (error) {
+            toast.error(
+                error instanceof Error ? error.message : "Signup failed",
+            );
+        }
     };
 
     return (
@@ -99,7 +112,7 @@ export default function Signup() {
                         <Button
                             type="submit"
                             variant="contained"
-                            disabled={isSubmitting}
+                            disabled={isSubmitting || isPending}
                             style={{
                                 alignSelf: "center",
                                 margin: "4px 0px",

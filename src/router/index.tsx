@@ -15,19 +15,20 @@ const router = createBrowserRouter([
                 path: routes.home,
                 Component: Home,
             },
+            // Public Routes
+            {
+                path: routes.login,
+                Component: Login,
+            },
+            {
+                path: routes.signup,
+                Component: Signup,
+            },
+            {
+                path: routes.resetPassword,
+                Component: ResetPassword,
+            },
         ],
-    },
-    {
-        path: routes.login,
-        Component: Login,
-    },
-    {
-        path: routes.signup,
-        Component: Signup,
-    },
-    {
-        path: routes.resetPassword,
-        Component: ResetPassword,
     },
 ]);
 

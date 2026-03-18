@@ -1,3 +1,5 @@
+import { useLocation } from "react-router";
+
 const routes = {
     home: "/",
     login: "/login",
@@ -8,3 +10,18 @@ const routes = {
 };
 
 export default routes;
+
+export const useRoutes = () => {
+    const { pathname } = useLocation();
+
+    const isPublicRoute = [
+        routes.login,
+        routes.signup,
+        routes.resetPassword,
+    ].includes(pathname);
+
+    return {
+        isPublicRoute,
+        pathname,
+    };
+};

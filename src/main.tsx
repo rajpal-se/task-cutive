@@ -11,12 +11,16 @@ import { RouterProvider } from "react-router";
 import router from "./router";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import theme from "./theme";
+import { Provider } from "react-redux";
+import { store } from "./store";
 
 createRoot(document.getElementById("root")!).render(
     <StrictMode>
-        <CssBaseline />
-        <ThemeProvider theme={theme}>
-            <RouterProvider router={router} />
-        </ThemeProvider>
+        <Provider store={store}>
+            <CssBaseline />
+            <ThemeProvider theme={theme}>
+                <RouterProvider router={router} />
+            </ThemeProvider>
+        </Provider>
     </StrictMode>,
 );

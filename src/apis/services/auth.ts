@@ -4,7 +4,7 @@ export async function getRefreshAccessTokenApi() {
     try {
         const response = await axiosInstance.post("/auth/refresh-access-token");
         if (response.data.success === true) {
-            return response.data?.accessToken;
+            return response.data;
         }
     } catch (error) {
         // console.error("Error refreshing access token:", error);

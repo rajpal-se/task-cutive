@@ -50,7 +50,7 @@ export async function getAccessToken(): Promise<string | null> {
     if (accessToken) {
         const accessTokenExp = JSON.parse(atob(accessToken.split(".")[1])).exp;
         const currentTime = Math.floor(Date.now() / 1000);
-        const diff = Math.abs(accessTokenExp - currentTime);
+        const diff = accessTokenExp - currentTime;
 
         const fiveMinutes = 5 * 60;
 

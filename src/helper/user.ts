@@ -9,6 +9,7 @@ export async function getUserProfile() {
         store.dispatch(setUserData(userProfile));
         return userProfile;
     } catch (error) {
+        store.dispatch(setUserData(null));
         toast.error(
             error instanceof Error
                 ? error.message

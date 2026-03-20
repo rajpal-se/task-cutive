@@ -5,6 +5,7 @@ import Login from "../pages/login";
 import Signup from "../pages/signup";
 import ResetPassword from "../pages/reset-password";
 import VerifyEmail from "../pages/verify-email";
+import Profile from "../pages/profile";
 import routes from "./routes";
 
 const router = createBrowserRouter([
@@ -32,6 +33,10 @@ const router = createBrowserRouter([
             {
                 path: routes.verifyEmail,
                 Component: VerifyEmail,
+            },
+            {
+                path: routes.profile,
+                Component: Profile,
             },
         ],
     },

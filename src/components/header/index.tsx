@@ -5,14 +5,21 @@ import { useLocation, useNavigate } from "react-router";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
+import routes from "../../router/routes";
 
 export default function Header() {
     const navigate = useNavigate();
     const { pathname } = useLocation();
 
     const handleLogoClick = () => {
-        if (pathname !== "/") {
-            navigate("/");
+        if (pathname !== routes.home) {
+            navigate(routes.home);
+        }
+    };
+
+    const handleProfileClick = () => {
+        if (pathname !== routes.profile) {
+            navigate(routes.profile);
         }
     };
 
@@ -27,7 +34,9 @@ export default function Header() {
                         <AddCircleOutlineIcon />
                     </Box>
                     <Box className="actions">
-                        <AccountCircleOutlinedIcon />
+                        <AccountCircleOutlinedIcon
+                            onClick={handleProfileClick}
+                        />
                         <LogoutOutlinedIcon />
                     </Box>
                 </HeaderContainer>

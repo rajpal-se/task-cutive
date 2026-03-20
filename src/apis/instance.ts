@@ -7,7 +7,16 @@ export const axiosInstance = axios.create({
 
 // Request interceptor
 axiosInstance.interceptors.request.use((config) => {
-    const token = localStorage.getItem(LS.ACCESS_TOKEN);
+    let token = "";
+
+    switch (config.url) {
+        case "/auth/refresh-access-token":
+            token = localStorage.getItem(LS.REFRESH_TOKEN) ?? "";
+            break;
+        default:
+            token = localStorage.getItem(LS.ACCESS_TOKEN) ?? "";
+    }
+
     if (token) {
         config.headers.Authorization = `Bearer ${token}`;
     }

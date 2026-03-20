@@ -1,9 +1,21 @@
 import { axiosInstance } from "../instance";
 
+export async function getRefreshAccessTokenApi() {
+    try {
+        const response = await axiosInstance.post("/auth/refresh-access-token");
+        if (response.data.success === true) {
+            return response.data?.accessToken;
+        }
+    } catch (error) {
+        // console.error("Error refreshing access token:", error);
+    }
+    return null;
+}
+
 export async function loginApi(payload: { email: string; password: string }) {
     try {
         const response = await axiosInstance.post("/auth/login", payload);
-        console.dir(22222, response);
+        // console.log(22222, response);
         const { success, data, message } = response?.data ?? {};
         if (success === true) {
             return data;

@@ -10,6 +10,7 @@ import {
 import AppAutoContainer from "../../components/app-auto-container";
 import { Controller, useForm } from "react-hook-form";
 import { TextField } from "../../components/styled/text-field";
+import { DueDateTimeField } from "../../components/styled/due-datetime-field";
 import { useNavigate, useParams } from "react-router";
 import routes from "../../router/routes";
 import { useCreateTask, useTaskById, useUpdateTask } from "../../apis";
@@ -157,6 +158,7 @@ export default function TaskEditorPage() {
                                 <TextField
                                     {...field}
                                     label="Description"
+                                    required={false}
                                     multiline
                                     minRows={3}
                                 />
@@ -166,14 +168,16 @@ export default function TaskEditorPage() {
                         <Controller
                             name="dueDatetime"
                             control={control}
-                            render={({ field }) => (
-                                <TextField
-                                    {...field}
-                                    label="Due Date & Time"
-                                    type="datetime-local"
-                                    slotProps={{
-                                        inputLabel: { shrink: true },
-                                    }}
+                            rules={{ required: "Due date is required" }}
+                            render={({ field, fieldState }) => (
+                                <DueDateTimeField
+                                    value={field.value}
+                                    onChange={field.onChange}
+                                    error={!!fieldState.error}
+                                    helperText={
+                                        fieldState.error?.message ||
+                                        "Pick the deadline date and time"
+                                    }
                                 />
                             )}
                         />

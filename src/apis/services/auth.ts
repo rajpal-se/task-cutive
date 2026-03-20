@@ -25,3 +25,34 @@ export async function loginApi(payload: { email: string; password: string }) {
         );
     }
 }
+
+export async function verifyEmailOtpApi(payload: {
+    email: string;
+    otp: string;
+}) {
+    try {
+        const response = await axiosInstance.post("/auth/verify-otp", {
+            ...payload,
+            purpose: "verify-email",
+        });
+        const { success, data, message } = response?.data ?? {};
+
+        if (success === true) {
+            return {
+                ...data,
+                message,
+            };
+        }
+
+        throw new Error(message || "Email verification failed");
+    } catch (error: any) {
+        const response = error?.response || error?.cause?.response;
+        const { message } = response?.data ?? {};
+
+        throw new Error(
+            error instanceof Error
+                ? (message ?? error?.message)
+                : "Email verification failed",
+        );
+    }
+}

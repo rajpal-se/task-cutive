@@ -19,6 +19,7 @@ export const useRoutes = () => {
         routes.login,
         routes.signup,
         routes.resetPassword,
+        routes.verifyEmail,
     ].includes(pathname);
 
     return {

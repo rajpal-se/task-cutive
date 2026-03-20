@@ -63,16 +63,4 @@ export const signupFormSchema = yup
     })
     .required();
 
-export const loginFormSchema = yup
-    .object({
-        email: yup
-            .string()
-            .trim()
-            .email("Email must be valid")
-            .required("Email is required"),
-        password: yup.string().required("Password is required"),
-    })
-    .required();
-
 export type SignupFormValues = yup.InferType<typeof signupFormSchema>;
-export type LoginFormValues = yup.InferType<typeof loginFormSchema>;

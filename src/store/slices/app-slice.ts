@@ -1,8 +1,4 @@
-import {
-    createSelector,
-    createSlice,
-    type PayloadAction,
-} from "@reduxjs/toolkit";
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { RTK } from "../constants";
 import type { RootState } from "..";
 
@@ -20,7 +16,5 @@ export const appSlice = createSlice({
 
 export const { setIsAppLoading } = appSlice.actions;
 
-export const isAppLoadingSelector = createSelector(
-    (state: RootState) => state.app.isAppLoading,
-    (isAppLoading) => isAppLoading,
-);
+export const isAppLoadingSelector = (state: RootState) =>
+    state.app.isAppLoading;

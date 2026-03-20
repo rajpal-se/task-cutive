@@ -9,7 +9,7 @@ export function TaskTabs({ children }: PropsWithChildren) {
     const tabIndex = taskTabs.findIndex((t) => t.id === tab.id);
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-        console.log({ newValue }, event);
+        // console.log({ newValue }, event);
         setTab(taskTabs[newValue].id);
     };
 

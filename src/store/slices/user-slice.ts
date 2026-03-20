@@ -1,8 +1,4 @@
-import {
-    createSelector,
-    createSlice,
-    type PayloadAction,
-} from "@reduxjs/toolkit";
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { RTK } from "../constants";
 import { type RootState } from "..";
 import type { UserData } from "../../types";
@@ -23,7 +19,4 @@ export const userSlice = createSlice({
 
 export const { setUserData } = userSlice.actions;
 
-export const userDataSelector = createSelector(
-    (state: RootState) => state.user.data,
-    (data) => data,
-);
+export const userDataSelector = (state: RootState) => state.user.data;

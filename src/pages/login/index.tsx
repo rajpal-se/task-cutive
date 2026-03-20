@@ -3,16 +3,72 @@ import AuthLayout from "../../components/auth-layout";
 import { EmailField } from "../../components/styled/email-field";
 import { PasswordField } from "../../components/styled/password-field";
 import { useNavigate } from "react-router";
+import { Controller, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { loginFormSchema, type LoginFormValues } from "../../schemas";
+import { useLogin } from "../../apis";
+import { LS } from "../../constants";
+import { toast } from "sonner";
+import routes from "../../router/routes";
 
 export default function Login() {
     const navigate = useNavigate();
+    const { mutateAsync: login, isPending } = useLogin();
+
+    const {
+        control,
+        handleSubmit,
+        formState: { isSubmitting },
+    } = useForm<LoginFormValues>({
+        resolver: yupResolver(loginFormSchema),
+        defaultValues: {
+            email: "",
+            password: "",
+        },
+    });
 
     const handleSignup = () => {
-        navigate("/signup");
+        navigate(routes.signup);
     };
 
     const handleForgotPassword = () => {
-        navigate("/reset-password");
+        navigate(routes.resetPassword);
+    };
+
+    const onSubmit = async (data: LoginFormValues) => {
+        try {
+            const response = await login(data);
+            console.log("Login response:", response);
+            const { success, data: responseData, message } = response;
+
+            if (success === false) {
+                navigate(routes.verifyEmail, {
+                    state: { email: data.email, loginFlow: true },
+                });
+                toast.success("Login Successful. Please verify your email.");
+                return;
+            }
+
+            const accessToken =
+                response?.accessToken ?? response?.data?.accessToken;
+            const refreshToken =
+                response?.refreshToken ?? response?.data?.refreshToken;
+
+            if (accessToken) {
+                localStorage.setItem(LS.ACCESS_TOKEN, accessToken);
+            }
+
+            if (refreshToken) {
+                localStorage.setItem(LS.REFRESH_TOKEN, refreshToken);
+            }
+
+            toast.success("Login successful");
+            navigate("/");
+        } catch (error) {
+            toast.error(
+                error instanceof Error ? error.message : "Login failed",
+            );
+        }
     };
 
     return (
@@ -22,13 +78,41 @@ export default function Login() {
                     Login
                 </Typography>
 
-                <Box>
+                <Box
+                    component="form"
+                    onSubmit={handleSubmit(onSubmit)}
+                    noValidate
+                >
                     <Box sx={{ mt: 1 }} gap={2}>
                         <Box className="formTop">
-                            <EmailField label="Email" />
-                            <PasswordField label="Password" />
+                            <Controller
+                                name="email"
+                                control={control}
+                                render={({ field, fieldState }) => (
+                                    <EmailField
+                                        {...field}
+                                        label="Email"
+                                        error={!!fieldState.error}
+                                        helperText={fieldState.error?.message}
+                                    />
+                                )}
+                            />
+                            <Controller
+                                name="password"
+                                control={control}
+                                render={({ field, fieldState }) => (
+                                    <PasswordField
+                                        {...field}
+                                        label="Password"
+                                        error={!!fieldState.error}
+                                        helperText={fieldState.error?.message}
+                                    />
+                                )}
+                            />
                             <Button
+                                type="submit"
                                 variant="contained"
+                                disabled={isSubmitting || isPending}
                                 style={{
                                     alignSelf: "center",
                                     margin: "4px 0px",

@@ -20,7 +20,9 @@ axiosInstance.interceptors.response.use(
     (error) => {
         const data = error?.response?.data;
         if (data?.success === false) {
-            return Promise.reject(new Error(data?.message || "API error"));
+            return Promise.reject(
+                new Error(data?.message || "API error", { cause: error }),
+            );
         }
         return Promise.reject(error);
     },

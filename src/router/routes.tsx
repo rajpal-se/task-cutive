@@ -5,6 +5,7 @@ const routes = {
     login: "/login",
     signup: "/signup",
     resetPassword: "/reset-password",
+    verifyEmail: "/verify-email",
     profile: "/profile",
     new: "/new",
 };

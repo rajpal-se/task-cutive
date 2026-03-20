@@ -5,3 +5,8 @@ export const taskTabs = [
     { id: "done", label: "Done" },
     { id: "overdue", label: "Overdue" },
 ];
+
+export const LS = {
+    ACCESS_TOKEN: "access_token",
+    REFRESH_TOKEN: "refresh_token",
+};

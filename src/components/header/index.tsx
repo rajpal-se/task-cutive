@@ -6,10 +6,19 @@ import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import routes from "../../router/routes";
+import { useLogout } from "../../apis";
+import { toast } from "sonner";
+import { setUserData } from "../../store";
+import { useDispatch } from "react-redux";
+import { ConfirmDialog } from "../styled/confirm-dialog";
+import { useState } from "react";
 
 export default function Header() {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const { pathname } = useLocation();
+    const [isLogoutDialogOpen, setIsLogoutDialogOpen] = useState(false);
+    const { mutateAsync: logout, isPending: isLogoutPending } = useLogout();
 
     const handleLogoClick = () => {
         if (pathname !== routes.home) {
@@ -23,25 +32,65 @@ export default function Header() {
         }
     };
 
+    const handleLogoutClick = () => {
+        setIsLogoutDialogOpen(true);
+    };
+
+    const handleCloseLogoutDialog = () => {
+        if (!isLogoutPending) {
+            setIsLogoutDialogOpen(false);
+        }
+    };
+
+    const handleConfirmLogout = async () => {
+        setIsLogoutDialogOpen(false);
+
+        try {
+            await logout();
+            toast.success("Logged out successfully");
+        } catch (error) {
+            toast.error(
+                error instanceof Error ? error.message : "Logout failed",
+            );
+        } finally {
+            localStorage.clear();
+            dispatch(setUserData(null));
+            navigate(routes.login);
+        }
+    };
+
     return (
-        <HeaderRoot>
-            <AppAutoContainer>
-                <HeaderContainer>
-                    <Box className="logo" onClick={handleLogoClick}>
-                        <Box>{config.appName}</Box>
-                    </Box>
-                    <Box className="add">
-                        <AddCircleOutlineIcon />
-                    </Box>
-                    <Box className="actions">
-                        <AccountCircleOutlinedIcon
-                            onClick={handleProfileClick}
-                        />
-                        <LogoutOutlinedIcon />
-                    </Box>
-                </HeaderContainer>
-            </AppAutoContainer>
-        </HeaderRoot>
+        <>
+            <HeaderRoot>
+                <AppAutoContainer>
+                    <HeaderContainer>
+                        <Box className="logo" onClick={handleLogoClick}>
+                            <Box>{config.appName}</Box>
+                        </Box>
+                        <Box className="add">
+                            <AddCircleOutlineIcon />
+                        </Box>
+                        <Box className="actions">
+                            <AccountCircleOutlinedIcon
+                                onClick={handleProfileClick}
+                            />
+                            <LogoutOutlinedIcon onClick={handleLogoutClick} />
+                        </Box>
+                    </HeaderContainer>
+                </AppAutoContainer>
+            </HeaderRoot>
+
+            <ConfirmDialog
+                open={isLogoutDialogOpen}
+                title="Confirm Logout"
+                message="You are about to sign out from Task Cutive. Do you want to continue?"
+                confirmText="Logout"
+                cancelText="Stay Logged In"
+                loading={isLogoutPending}
+                onConfirm={handleConfirmLogout}
+                onClose={handleCloseLogoutDialog}
+            />
+        </>
     );
 }
 

@@ -68,3 +68,25 @@ export async function verifyEmailOtpApi(payload: {
         );
     }
 }
+
+export async function logoutApi() {
+    try {
+        const response = await axiosInstance.post("/auth/logout", {});
+        const { success, message } = response?.data ?? {};
+
+        if (success === true) {
+            return response.data;
+        }
+
+        throw new Error(message || "Logout failed");
+    } catch (error: any) {
+        const response = error?.response || error?.cause?.response;
+        const { message } = response?.data ?? {};
+
+        throw new Error(
+            error instanceof Error
+                ? (message ?? error.message)
+                : "Logout failed",
+        );
+    }
+}

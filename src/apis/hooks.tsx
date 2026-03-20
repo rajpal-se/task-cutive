@@ -4,11 +4,12 @@ import type {
     SignupFormValues,
     VerifyEmailFormValues,
 } from "../schemas";
-import { loginApi, signupApi, verifyEmailOtpApi } from "./services";
+import { loginApi, logoutApi, signupApi, verifyEmailOtpApi } from "./services";
 
 type SignupResponse = Awaited<ReturnType<typeof signupApi>>;
 type LoginResponse = Awaited<ReturnType<typeof loginApi>>;
 type VerifyEmailResponse = Awaited<ReturnType<typeof verifyEmailOtpApi>>;
+type LogoutResponse = Awaited<ReturnType<typeof logoutApi>>;
 
 export function useLogin(
     options?: UseMutationOptions<LoginResponse, Error, LoginFormValues>,
@@ -37,6 +38,15 @@ export function useVerifyEmail(
 ) {
     return useMutation<VerifyEmailResponse, Error, VerifyEmailFormValues>({
         mutationFn: verifyEmailOtpApi,
+        ...options,
+    });
+}
+
+export function useLogout(
+    options?: UseMutationOptions<LogoutResponse, Error, void>,
+) {
+    return useMutation<LogoutResponse, Error, void>({
+        mutationFn: logoutApi,
         ...options,
     });
 }

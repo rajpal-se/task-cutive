@@ -10,10 +10,13 @@ import { useLogin } from "../../apis";
 import { LS } from "../../constants";
 import { toast } from "sonner";
 import routes from "../../router/routes";
+import { useDispatch } from "react-redux";
+import { setUserData } from "../../store";
 
 export default function Login() {
     const navigate = useNavigate();
     const { mutateAsync: login, isPending } = useLogin();
+    const dispatch = useDispatch();
 
     const {
         control,
@@ -38,8 +41,7 @@ export default function Login() {
     const onSubmit = async (data: LoginFormValues) => {
         try {
             const response = await login(data);
-            console.log("Login response:", response);
-            const { success, data: responseData, message } = response;
+            const { success } = response;
 
             if (success === false) {
                 navigate(routes.verifyEmail, {
@@ -49,10 +51,8 @@ export default function Login() {
                 return;
             }
 
-            const accessToken =
-                response?.accessToken ?? response?.data?.accessToken;
-            const refreshToken =
-                response?.refreshToken ?? response?.data?.refreshToken;
+            const accessToken = response?.accessToken;
+            const refreshToken = response?.refreshToken;
 
             if (accessToken) {
                 localStorage.setItem(LS.ACCESS_TOKEN, accessToken);
@@ -60,6 +60,12 @@ export default function Login() {
 
             if (refreshToken) {
                 localStorage.setItem(LS.REFRESH_TOKEN, refreshToken);
+            }
+
+            const userData = response?.user;
+            // console.log("User Data from Login Response:", userData, response);
+            if (userData) {
+                dispatch(setUserData(userData));
             }
 
             toast.success("Login successful");

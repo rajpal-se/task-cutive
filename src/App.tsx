@@ -25,6 +25,7 @@ export default function App() {
             if (!accessToken) {
                 navigate(routes.login);
                 dispatch(setIsAppLoading(false));
+                return;
             }
             await getUserProfile();
             dispatch(setIsAppLoading(false));

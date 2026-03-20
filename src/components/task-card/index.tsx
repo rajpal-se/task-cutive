@@ -5,15 +5,25 @@ import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import DoneAllIcon from "@mui/icons-material/DoneAll";
 
 interface TaskCardProps {
+    taskId: string;
     title: string;
     description: string;
     dueDate: Date;
     createdAt: Date;
     isCompleted: boolean;
+    onEdit?: (taskId: string) => void;
 }
 
 export default function TaskCard(props: TaskCardProps) {
-    const { title, description, dueDate, createdAt, isCompleted } = props;
+    const {
+        taskId,
+        title,
+        description,
+        dueDate,
+        createdAt,
+        isCompleted,
+        onEdit,
+    } = props;
     return (
         <TaskCardContainer isCompleted={isCompleted}>
             <Box className="calender-card">
@@ -38,7 +48,10 @@ export default function TaskCard(props: TaskCardProps) {
             </Box>
             <Box className="task-actions">
                 <Box className="actions">
-                    <EditIcon className="edit" />
+                    <EditIcon
+                        className="edit"
+                        onClick={() => onEdit?.(taskId)}
+                    />
                     <DeleteOutlineIcon className="delete" />
                 </Box>
                 <Box className="space" />

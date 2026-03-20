@@ -6,6 +6,7 @@ import Signup from "../pages/signup";
 import ResetPassword from "../pages/reset-password";
 import VerifyEmail from "../pages/verify-email";
 import Profile from "../pages/profile";
+import TaskEditorPage from "../pages/task-editor";
 import routes from "./routes";
 
 const router = createBrowserRouter([
@@ -37,6 +38,14 @@ const router = createBrowserRouter([
             {
                 path: routes.profile,
                 Component: Profile,
+            },
+            {
+                path: routes.new,
+                Component: TaskEditorPage,
+            },
+            {
+                path: routes.editTaskPattern,
+                Component: TaskEditorPage,
             },
         ],
     },

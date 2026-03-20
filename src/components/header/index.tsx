@@ -32,6 +32,12 @@ export default function Header() {
         }
     };
 
+    const handleAddTaskClick = () => {
+        if (pathname !== routes.new) {
+            navigate(routes.new);
+        }
+    };
+
     const handleLogoutClick = () => {
         setIsLogoutDialogOpen(true);
     };
@@ -68,7 +74,9 @@ export default function Header() {
                             <Box>{config.appName}</Box>
                         </Box>
                         <Box className="add">
-                            <AddCircleOutlineIcon />
+                            <AddCircleOutlineIcon
+                                onClick={handleAddTaskClick}
+                            />
                         </Box>
                         <Box className="actions">
                             <AccountCircleOutlinedIcon

@@ -13,9 +13,26 @@ export async function signupApi(payload: {
         }
         throw new Error(response.data.message || "Signup failed");
     } catch (error) {
-        console.dir(error);
         throw new Error(
             error instanceof Error ? error.message : "Signup failed",
+        );
+    }
+}
+
+export async function getUserProfileApi() {
+    try {
+        const response = await axiosInstance.get(`/users`);
+        if (response.data.success === true) {
+            return response.data.data;
+        }
+        throw new Error(
+            response.data.message || "Failed to fetch user profile",
+        );
+    } catch (error) {
+        throw new Error(
+            error instanceof Error
+                ? error.message
+                : "Failed to fetch user profile",
         );
     }
 }

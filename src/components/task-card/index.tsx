@@ -31,15 +31,7 @@ export default function TaskCard(props: TaskCardProps) {
             </Box>
             <Box className="task-info">
                 <h3>{title}</h3>
-                <p className="description">
-                    {description}
-                    {description}
-                    {description}
-                    {description}
-                    {description}
-                    {description}
-                    {description}
-                </p>
+                <p className="description">{description}</p>
                 <div className="dates">
                     <p>Remaining: 10 mins</p>
                     <Divider orientation="vertical" />

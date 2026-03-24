@@ -11,6 +11,7 @@ import type {
 } from "../schemas";
 import {
     createTaskApi,
+    getAllTasksApi,
     getTaskByIdApi,
     loginApi,
     logoutApi,
@@ -26,6 +27,7 @@ type LogoutResponse = Awaited<ReturnType<typeof logoutApi>>;
 type CreateTaskResponse = Awaited<ReturnType<typeof createTaskApi>>;
 type UpdateTaskResponse = Awaited<ReturnType<typeof updateTaskApi>>;
 type TaskByIdResponse = Awaited<ReturnType<typeof getTaskByIdApi>>;
+type TasksListResponse = Awaited<ReturnType<typeof getAllTasksApi>>;
 
 export function useLogin(
     options?: UseMutationOptions<LoginResponse, Error, LoginFormValues>,
@@ -112,6 +114,24 @@ export function useTaskById(
         queryKey: ["task", taskId],
         queryFn: () => getTaskByIdApi(taskId),
         enabled: Boolean(taskId),
+        ...options,
+    });
+}
+
+export function useTasks(
+    params?: Parameters<typeof getAllTasksApi>[0],
+    options?: Omit<
+        UseQueryOptions<TasksListResponse, Error>,
+        "queryKey" | "queryFn"
+    >,
+) {
+    const filter = params?.filter ?? "recent";
+    const page = params?.page ?? 1;
+    const perPage = params?.perPage ?? 20;
+
+    return useQuery<TasksListResponse, Error>({
+        queryKey: ["tasks", filter, page, perPage],
+        queryFn: () => getAllTasksApi({ filter, page, perPage }),
         ...options,
     });
 }

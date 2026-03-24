@@ -15,6 +15,69 @@ export interface TaskPayloadUpdate {
     is_completed?: boolean;
 }
 
+export interface TaskItem {
+    _id: string;
+    title: string;
+    description: string;
+    is_high_priority: boolean;
+    is_completed: boolean;
+    due_datetime: string;
+    created_at: string;
+    updated_at: string;
+    __v: number;
+}
+
+export interface TasksListResponse {
+    tasks: TaskItem[];
+    pagination: {
+        total: number;
+        page: number;
+        perPage: number;
+        totalPages: number;
+    };
+}
+
+export type TaskFilter = "recent" | "upcoming" | "pending" | "done" | "overdue";
+
+function mapTaskFilter(filter: TaskFilter) {
+    if (filter === "overdue") {
+        return "expired";
+    }
+    return filter;
+}
+
+export async function getAllTasksApi(params?: {
+    filter?: TaskFilter;
+    page?: number;
+    perPage?: number;
+}) {
+    try {
+        const filter = mapTaskFilter(params?.filter ?? "recent");
+        const page = params?.page ?? 1;
+        const perPage = params?.perPage ?? 20;
+
+        const response = await axiosInstance.get("/tasks", {
+            params: {
+                filter,
+                page,
+                perPage,
+            },
+        });
+
+        const { success, data, message } = response?.data ?? {};
+
+        if (success === true) {
+            return data as TasksListResponse;
+        }
+
+        throw new Error(message || "Failed to fetch tasks");
+    } catch (error) {
+        throw new Error(
+            error instanceof Error ? error.message : "Failed to fetch tasks",
+        );
+    }
+}
+
 export async function createTaskApi(payload: TaskPayloadCreate) {
     try {
         const response = await axiosInstance.post("/tasks", payload);

@@ -7,6 +7,7 @@ import VerifyOtpUi from "./verify-otp-ui";
 
 export default function ResetPassword() {
     const [verifyOtp, setVerifyOtp] = useState(false);
+    const [email, setEmail] = useState("");
     const navigate = useNavigate();
 
     const handleLogin = () => {
@@ -17,9 +18,13 @@ export default function ResetPassword() {
         <AuthLayout>
             <ResetPasswordContainer>
                 {verifyOtp ? (
-                    <VerifyOtpUi />
+                    <VerifyOtpUi email={email} />
                 ) : (
-                    <ResetPasswordUi setVerifyOtp={setVerifyOtp} />
+                    <ResetPasswordUi
+                        email={email}
+                        setEmail={setEmail}
+                        setVerifyOtp={setVerifyOtp}
+                    />
                 )}
                 <Box className="formBottom">
                     <Divider className="divider" />

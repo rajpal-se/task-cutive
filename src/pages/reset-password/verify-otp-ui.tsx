@@ -1,29 +1,128 @@
-import { Box, Button, styled, TextField, Typography } from "@mui/material";
+import { Box, Button, styled, Typography } from "@mui/material";
 import { useNavigate } from "react-router";
+import { Controller, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { TextField } from "../../components/styled/text-field";
+import { PasswordField } from "../../components/styled/password-field";
+import { useVerifyResetPasswordOtp } from "../../apis";
+import {
+    verifyResetPasswordFormSchema,
+    type VerifyResetPasswordFormValues,
+} from "../../schemas";
+import { toast } from "sonner";
+import routes from "../../router/routes";
 
-export default function VerifyOtpUi() {
+type VerifyOtpFormValues = VerifyResetPasswordFormValues & {
+    confirmPassword: string;
+};
+
+export default function VerifyOtpUi({ email }: { email: string }) {
     const navigate = useNavigate();
+    const { mutateAsync: verifyOtp, isPending } = useVerifyResetPasswordOtp();
 
-    const handleVerifyOtp = (e: React.MouseEvent<HTMLButtonElement>) => {
-        e.preventDefault();
-        navigate("/login", { replace: true });
+    const {
+        control,
+        handleSubmit,
+        formState: { isSubmitting },
+    } = useForm<VerifyOtpFormValues>({
+        resolver: yupResolver(verifyResetPasswordFormSchema),
+        defaultValues: {
+            otp: "",
+            newPassword: "",
+            confirmPassword: "",
+        },
+    });
+
+    const onSubmit = async (data: VerifyOtpFormValues) => {
+        try {
+            await verifyOtp({
+                email,
+                otp: data.otp,
+                newPassword: data.newPassword,
+            });
+            toast.success("Password reset successful. Please login.");
+            navigate(routes.login, { replace: true });
+        } catch (error) {
+            toast.error(
+                error instanceof Error
+                    ? error.message
+                    : "OTP verification failed",
+            );
+        }
     };
+
+    const isDisabled = !email || isSubmitting || isPending;
 
     return (
         <ResetPasswordContainer>
             <Typography variant="h5" className="heading">
                 Verify OTP
             </Typography>
-            <Box className="form">
-                <TextField label="OTP" required />
+
+            <Box
+                component="form"
+                className="form"
+                onSubmit={handleSubmit(onSubmit)}
+                noValidate
+            >
+                <Controller
+                    name="otp"
+                    control={control}
+                    render={({ field, fieldState }) => (
+                        <TextField
+                            {...field}
+                            label="OTP"
+                            error={!!fieldState.error}
+                            helperText={fieldState.error?.message}
+                        />
+                    )}
+                />
+
+                <Controller
+                    name="newPassword"
+                    control={control}
+                    render={({ field, fieldState }) => (
+                        <PasswordField
+                            {...field}
+                            autoComplete="new-password"
+                            label="New Password"
+                            error={!!fieldState.error}
+                            helperText={fieldState.error?.message}
+                        />
+                    )}
+                />
+
+                <Controller
+                    name="confirmPassword"
+                    control={control}
+                    render={({ field, fieldState }) => (
+                        <PasswordField
+                            {...field}
+                            autoComplete="new-password"
+                            label="Confirm Password"
+                            error={!!fieldState.error}
+                            helperText={fieldState.error?.message}
+                        />
+                    )}
+                />
+
                 <Button
                     type="submit"
                     variant="contained"
                     className="submitButton"
-                    onClick={handleVerifyOtp}
+                    disabled={isDisabled}
                 >
-                    Verify OTP
+                    Verify OTP & Reset Password
                 </Button>
+                {!email ? (
+                    <Typography
+                        variant="body2"
+                        color="error"
+                        className="warning"
+                    >
+                        Please submit your email first to request OTP.
+                    </Typography>
+                ) : null}
             </Box>
         </ResetPasswordContainer>
     );
@@ -45,5 +144,8 @@ const ResetPasswordContainer = styled(Box)(({ theme }) => ({
     ".submitButton": {
         alignSelf: "center",
         margin: "4px 0px",
+    },
+    ".warning": {
+        textAlign: "center",
     },
 }));

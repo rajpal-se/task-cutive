@@ -90,3 +90,64 @@ export async function logoutApi() {
         );
     }
 }
+
+export async function resetPasswordApi(payload: { email: string }) {
+    try {
+        const response = await axiosInstance.post(
+            "/auth/reset-password",
+            payload,
+        );
+        const { success, message } = response?.data ?? {};
+
+        if (success === true) {
+            return {
+                success,
+                message,
+            };
+        }
+
+        throw new Error(message || "Failed to request password reset OTP");
+    } catch (error: any) {
+        const response = error?.response || error?.cause?.response;
+        const { message } = response?.data ?? {};
+
+        throw new Error(
+            error instanceof Error
+                ? (message ?? error.message)
+                : "Failed to request password reset OTP",
+        );
+    }
+}
+
+export async function verifyResetPasswordOtpApi(payload: {
+    email: string;
+    otp: string;
+    newPassword: string;
+}) {
+    try {
+        const response = await axiosInstance.post("/auth/verify-otp", {
+            ...payload,
+            purpose: "reset-password",
+        });
+
+        const { success, data, message } = response?.data ?? {};
+
+        if (success === true) {
+            return {
+                ...data,
+                message,
+            };
+        }
+
+        throw new Error(message || "Failed to reset password");
+    } catch (error: any) {
+        const response = error?.response || error?.cause?.response;
+        const { message } = response?.data ?? {};
+
+        throw new Error(
+            error instanceof Error
+                ? (message ?? error.message)
+                : "Failed to reset password",
+        );
+    }
+}

@@ -94,6 +94,7 @@ export default function TasksTabPanel() {
                     dueDate={new Date(task.due_datetime)}
                     createdAt={new Date(task.created_at)}
                     isCompleted={task.is_completed}
+                    isHighPriority={task.is_high_priority}
                     onEdit={handleEditTask}
                 />
             ))}

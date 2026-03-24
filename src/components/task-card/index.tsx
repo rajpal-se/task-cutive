@@ -15,6 +15,8 @@ interface TaskCardProps {
     isCompleted: boolean;
     isHighPriority?: boolean;
     onEdit?: (taskId: string) => void;
+    onToggleComplete?: (taskId: string, isCompleted: boolean) => void;
+    isMarkingComplete?: boolean;
 }
 
 export default function TaskCard(props: TaskCardProps) {
@@ -27,6 +29,8 @@ export default function TaskCard(props: TaskCardProps) {
         isCompleted,
         isHighPriority = false,
         onEdit,
+        onToggleComplete,
+        isMarkingComplete = false,
     } = props;
     const { label: countdownLabel, isExpired } = useCountdown(
         dueDate,
@@ -58,13 +62,38 @@ export default function TaskCard(props: TaskCardProps) {
                 <Box className="space" />
                 <Box className="status">
                     {isCompleted ? (
-                        <DoneAllIcon className="done" />
-                    ) : isExpired ? (
+                        <>
+                            <DoneAllIcon
+                                className={`completed-done ${isMarkingComplete ? "disabled" : ""}`}
+                                aria-label="Mark task as uncompleted"
+                                onClick={() => {
+                                    if (!isMarkingComplete) {
+                                        onToggleComplete?.(taskId, isCompleted);
+                                    }
+                                }}
+                            />
+                            <span className="done-label">Completed</span>
+                        </>
+                    ) : null}
+                    {!isCompleted && (
+                        <>
+                            <DoneAllIcon
+                                className={`mark-done ${isMarkingComplete ? "disabled" : ""}`}
+                                aria-label="Mark task as completed"
+                                onClick={() => {
+                                    if (!isMarkingComplete) {
+                                        onToggleComplete?.(taskId, isCompleted);
+                                    }
+                                }}
+                            />
+                        </>
+                    )}
+                    {isExpired && !isCompleted && (
                         <>
                             <ErrorOutlineIcon className="expired-icon" />
                             <span className="expired-label">Expired</span>
                         </>
-                    ) : null}
+                    )}
                 </Box>
             </Box>
         </TaskCardContainer>
@@ -172,12 +201,40 @@ const TaskCardContainer = styled(Box, {
             ".status": {
                 display: "flex",
                 alignItems: "center",
+                justifyContent: "flex-end",
+                flexWrap: "wrap",
+                width: "100%",
+                textAlign: "right",
                 fontWeight: 500,
                 gap: "4px",
                 margin: "8px 0px",
                 marginRight: "12px",
                 ...(isCompleted && { color: "#4caf50" }),
                 ...(isExpired && { color: "#d32f2f" }),
+            },
+
+            ".completed-done": {
+                color: "#4caf50",
+
+                "&.disabled": {
+                    pointerEvents: "none",
+                    opacity: 0.5,
+                },
+            },
+
+            ".mark-done": {
+                cursor: "pointer",
+                color: "#616161",
+
+                "&.disabled": {
+                    pointerEvents: "none",
+                    opacity: 0.5,
+                },
+            },
+
+            ".done-label": {
+                fontSize: "12px",
+                lineHeight: 1,
             },
 
             ".expired-label": {

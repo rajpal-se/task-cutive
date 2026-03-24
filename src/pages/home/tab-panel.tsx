@@ -1,23 +1,58 @@
 import { Box, CircularProgress, Typography } from "@mui/material";
-import { useTasks, type TaskFilter } from "../../apis";
+import { useTasks, useUpdateTask, type TaskFilter } from "../../apis";
 import { useTasksTab } from "../../contexts/tasks-tab";
 import TaskCard from "../../components/task-card";
 import { useNavigate } from "react-router";
 import routes from "../../router/routes";
+import { toast } from "sonner";
+import { useState } from "react";
 
 export default function TasksTabPanel() {
     const { tab } = useTasksTab();
     const navigate = useNavigate();
+    const [updatingTaskId, setUpdatingTaskId] = useState<string | null>(null);
+    const { mutateAsync: updateTask, isPending: isUpdatingTask } =
+        useUpdateTask();
     const {
         data: tasksData,
         isLoading,
         isFetching,
         isError,
         error,
+        refetch,
     } = useTasks({ filter: tab.id as TaskFilter, page: 1, perPage: 20 });
 
     const handleEditTask = (taskId: string) => {
         navigate(routes.editTask(taskId));
+    };
+
+    const handleToggleComplete = async (
+        taskId: string,
+        isCompleted: boolean,
+    ) => {
+        try {
+            setUpdatingTaskId(taskId);
+            await updateTask({
+                taskId,
+                payload: {
+                    is_completed: !isCompleted,
+                },
+            });
+            toast.success(
+                isCompleted
+                    ? "Task marked as uncompleted"
+                    : "Task marked as completed",
+            );
+            await refetch();
+        } catch (error) {
+            toast.error(
+                error instanceof Error
+                    ? error.message
+                    : "Failed to update task",
+            );
+        } finally {
+            setUpdatingTaskId(null);
+        }
     };
 
     if (isLoading) {
@@ -96,6 +131,10 @@ export default function TasksTabPanel() {
                     isCompleted={task.is_completed}
                     isHighPriority={task.is_high_priority}
                     onEdit={handleEditTask}
+                    onToggleComplete={handleToggleComplete}
+                    isMarkingComplete={
+                        isUpdatingTask && updatingTaskId === task._id
+                    }
                 />
             ))}
         </Box>

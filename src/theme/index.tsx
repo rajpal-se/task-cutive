@@ -26,16 +26,30 @@ const theme = createTheme({
                 variant: "outlined",
                 color: "primary",
             },
+            styleOverrides: {
+                root: {
+                    "& .MuiInputBase-root input": {
+                        padding: "9px 14px",
+                    },
+                },
+            },
+        },
+        MuiFormControl: {
+            styleOverrides: {
+                root: {
+                    "& .MuiPickersInputBase-root": {
+                        paddingLeft: 0,
+                    },
+                },
+            },
         },
         MuiOutlinedInput: {
             styleOverrides: {
                 root: {
-                    height: 42,
                     borderRadius: 8,
                     backgroundColor: "#fff",
                 },
                 input: {
-                    padding: "9px 14px",
                     fontSize: "0.95rem",
                 },
             },

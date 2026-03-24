@@ -160,7 +160,9 @@ export default function TaskEditorPage() {
                                     label="Description"
                                     required={false}
                                     multiline
-                                    minRows={3}
+                                    minRows={4}
+                                    maxRows={10}
+                                    placeholder="Write task details"
                                 />
                             )}
                         />

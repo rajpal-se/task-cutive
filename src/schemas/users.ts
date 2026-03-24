@@ -63,4 +63,14 @@ export const signupFormSchema = yup
     })
     .required();
 
+export const updateUserProfileFormSchema = yup
+    .object({
+        firstName: yup.string().trim().required("First name is required"),
+        lastName: yup.string().trim().required("Last name is required"),
+    })
+    .required();
+
 export type SignupFormValues = yup.InferType<typeof signupFormSchema>;
+export type UpdateUserProfileFormValues = yup.InferType<
+    typeof updateUserProfileFormSchema
+>;

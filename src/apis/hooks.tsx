@@ -8,6 +8,7 @@ import type {
     LoginFormValues,
     ResetPasswordFormValues,
     SignupFormValues,
+    UpdateUserProfileFormValues,
     VerifyEmailFormValues,
 } from "../schemas";
 import {
@@ -18,6 +19,7 @@ import {
     logoutApi,
     resetPasswordApi,
     signupApi,
+    updateUserProfileApi,
     updateTaskApi,
     verifyEmailOtpApi,
     verifyResetPasswordOtpApi,
@@ -38,6 +40,9 @@ type CreateTaskResponse = Awaited<ReturnType<typeof createTaskApi>>;
 type UpdateTaskResponse = Awaited<ReturnType<typeof updateTaskApi>>;
 type TaskByIdResponse = Awaited<ReturnType<typeof getTaskByIdApi>>;
 type TasksListResponse = Awaited<ReturnType<typeof getAllTasksApi>>;
+type UpdateUserProfileResponse = Awaited<
+    ReturnType<typeof updateUserProfileApi>
+>;
 
 export function useLogin(
     options?: UseMutationOptions<LoginResponse, Error, LoginFormValues>,
@@ -53,6 +58,23 @@ export function useSignup(
 ) {
     return useMutation<SignupResponse, Error, SignupFormValues>({
         mutationFn: signupApi,
+        ...options,
+    });
+}
+
+export function useUpdateUserProfile(
+    options?: UseMutationOptions<
+        UpdateUserProfileResponse,
+        Error,
+        UpdateUserProfileFormValues
+    >,
+) {
+    return useMutation<
+        UpdateUserProfileResponse,
+        Error,
+        UpdateUserProfileFormValues
+    >({
+        mutationFn: updateUserProfileApi,
         ...options,
     });
 }

@@ -3,6 +3,7 @@ import CalenderCard from "./calender-card";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import DoneAllIcon from "@mui/icons-material/DoneAll";
+import { useCountdown } from "./use-countdown";
 
 interface TaskCardProps {
     taskId: string;
@@ -24,6 +25,8 @@ export default function TaskCard(props: TaskCardProps) {
         isCompleted,
         onEdit,
     } = props;
+    const countdownLabel = useCountdown(dueDate, isCompleted);
+
     return (
         <TaskCardContainer isCompleted={isCompleted}>
             <Box className="calender-card">
@@ -33,7 +36,7 @@ export default function TaskCard(props: TaskCardProps) {
                 <h3>{title}</h3>
                 <p className="description">{description}</p>
                 <div className="dates">
-                    <p>Remaining: 10 mins</p>
+                    <p>{countdownLabel}</p>
                     <Divider orientation="vertical" />
                     <p>Added on: {createdAt.toLocaleString()}</p>
                 </div>

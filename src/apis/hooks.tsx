@@ -194,6 +194,9 @@ export function useTasks(
     return useQuery<TasksListResponse, Error>({
         queryKey: ["tasks", filter, page, perPage],
         queryFn: () => getAllTasksApi({ filter, page, perPage }),
+        staleTime: 0,
+        gcTime: 0,
+        refetchOnMount: "always",
         ...options,
     });
 }

@@ -128,6 +128,7 @@ export default function TasksTabPanel() {
                     description={task.description || "No description"}
                     dueDate={new Date(task.due_datetime)}
                     createdAt={new Date(task.created_at)}
+                    completedAt={new Date(task.updated_at)}
                     isCompleted={task.is_completed}
                     isHighPriority={task.is_high_priority}
                     onEdit={handleEditTask}

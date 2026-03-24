@@ -12,6 +12,7 @@ interface TaskCardProps {
     description: string;
     dueDate: Date;
     createdAt: Date;
+    completedAt?: Date;
     isCompleted: boolean;
     isHighPriority?: boolean;
     onEdit?: (taskId: string) => void;
@@ -26,6 +27,7 @@ export default function TaskCard(props: TaskCardProps) {
         description,
         dueDate,
         createdAt,
+        completedAt,
         isCompleted,
         isHighPriority = false,
         onEdit,
@@ -35,6 +37,7 @@ export default function TaskCard(props: TaskCardProps) {
     const { label: countdownLabel, isExpired } = useCountdown(
         dueDate,
         isCompleted,
+        completedAt,
     );
 
     return (

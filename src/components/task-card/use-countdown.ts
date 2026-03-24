@@ -1,7 +1,60 @@
 import { useEffect, useState } from "react";
 
-function getCountdownLabel(dueDate: Date, nowMs: number, isCompleted: boolean) {
+function formatElapsedAgo(fromMs: number, nowMs: number) {
+    const diffSeconds = Math.max(0, Math.floor((nowMs - fromMs) / 1000));
+
+    const MINUTE = 60;
+    const HOUR = 60 * MINUTE;
+    const DAY = 24 * HOUR;
+    const MONTH = 30 * DAY;
+    const YEAR = 365 * DAY;
+
+    if (diffSeconds < MINUTE) {
+        const value = Math.max(1, diffSeconds);
+        const unit = value === 1 ? "sec" : "secs";
+        return `Completed ${value} ${unit} ago`;
+    }
+
+    if (diffSeconds < HOUR) {
+        const value = Math.floor(diffSeconds / MINUTE);
+        const unit = value === 1 ? "min" : "mins";
+        return `Completed ${value} ${unit} ago`;
+    }
+
+    if (diffSeconds < DAY) {
+        const value = Math.floor(diffSeconds / HOUR);
+        const unit = value === 1 ? "hour" : "hours";
+        return `Completed ${value} ${unit} ago`;
+    }
+
+    if (diffSeconds < MONTH) {
+        const value = Math.floor(diffSeconds / DAY);
+        const unit = value === 1 ? "day" : "days";
+        return `Completed ${value} ${unit} ago`;
+    }
+
+    if (diffSeconds < YEAR) {
+        const value = Math.floor(diffSeconds / MONTH);
+        const unit = value === 1 ? "month" : "months";
+        return `Completed ${value} ${unit} ago`;
+    }
+
+    const value = Math.floor(diffSeconds / YEAR);
+    const unit = value === 1 ? "year" : "years";
+    return `Completed ${value} ${unit} ago`;
+}
+
+function getCountdownLabel(
+    dueDate: Date,
+    nowMs: number,
+    isCompleted: boolean,
+    completedAt?: Date,
+) {
     if (isCompleted) {
+        const completedAtMs = completedAt?.getTime();
+        if (Number.isFinite(completedAtMs)) {
+            return formatElapsedAgo(Number(completedAtMs), nowMs);
+        }
         return "Completed";
     }
 
@@ -50,7 +103,11 @@ function getCountdownLabel(dueDate: Date, nowMs: number, isCompleted: boolean) {
     return `Remaining: ${value} ${unit}`;
 }
 
-export function useCountdown(dueDate: Date, isCompleted: boolean) {
+export function useCountdown(
+    dueDate: Date,
+    isCompleted: boolean,
+    completedAt?: Date,
+) {
     const [nowMs, setNowMs] = useState(() => Date.now());
 
     useEffect(() => {
@@ -66,7 +123,7 @@ export function useCountdown(dueDate: Date, isCompleted: boolean) {
         !isCompleted && Number.isFinite(dueMs) && Number(dueMs) < nowMs;
 
     return {
-        label: getCountdownLabel(dueDate, nowMs, isCompleted),
+        label: getCountdownLabel(dueDate, nowMs, isCompleted, completedAt),
         isExpired,
     };
 }

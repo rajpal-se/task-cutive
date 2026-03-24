@@ -61,5 +61,12 @@ export function useCountdown(dueDate: Date, isCompleted: boolean) {
         return () => window.clearInterval(timer);
     }, []);
 
-    return getCountdownLabel(dueDate, nowMs, isCompleted);
+    const dueMs = dueDate?.getTime();
+    const isExpired =
+        !isCompleted && Number.isFinite(dueMs) && Number(dueMs) < nowMs;
+
+    return {
+        label: getCountdownLabel(dueDate, nowMs, isCompleted),
+        isExpired,
+    };
 }

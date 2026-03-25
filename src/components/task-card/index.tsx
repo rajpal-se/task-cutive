@@ -4,7 +4,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import DoneAllIcon from "@mui/icons-material/DoneAll";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
-import { useCountdown } from "./use-countdown";
+import { useCountdown, useTimeAgo } from "./use-countdown";
 
 interface TaskCardProps {
     taskId: string;
@@ -39,6 +39,7 @@ export default function TaskCard(props: TaskCardProps) {
         isCompleted,
         completedAt,
     );
+    const createdAgoLabel = useTimeAgo(createdAt, "Added ");
 
     return (
         <TaskCardContainer isCompleted={isCompleted} isExpired={isExpired}>
@@ -51,7 +52,7 @@ export default function TaskCard(props: TaskCardProps) {
                 <div className="dates">
                     <p>{countdownLabel}</p>
                     <Divider orientation="vertical" />
-                    <p>Added on: {createdAt.toLocaleString()}</p>
+                    <p>{createdAgoLabel}</p>
                 </div>
             </Box>
             <Box className="task-actions">

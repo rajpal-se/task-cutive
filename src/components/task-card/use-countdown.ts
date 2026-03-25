@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-function formatElapsedAgo(fromMs: number, nowMs: number) {
+function formatElapsedAgo(fromMs: number, nowMs: number, prefix = "") {
     const diffSeconds = Math.max(0, Math.floor((nowMs - fromMs) / 1000));
 
     const MINUTE = 60;
@@ -12,36 +12,36 @@ function formatElapsedAgo(fromMs: number, nowMs: number) {
     if (diffSeconds < MINUTE) {
         const value = Math.max(1, diffSeconds);
         const unit = value === 1 ? "sec" : "secs";
-        return `Completed ${value} ${unit} ago`;
+        return `${prefix}${value} ${unit} ago`;
     }
 
     if (diffSeconds < HOUR) {
         const value = Math.floor(diffSeconds / MINUTE);
         const unit = value === 1 ? "min" : "mins";
-        return `Completed ${value} ${unit} ago`;
+        return `${prefix}${value} ${unit} ago`;
     }
 
     if (diffSeconds < DAY) {
         const value = Math.floor(diffSeconds / HOUR);
         const unit = value === 1 ? "hour" : "hours";
-        return `Completed ${value} ${unit} ago`;
+        return `${prefix}${value} ${unit} ago`;
     }
 
     if (diffSeconds < MONTH) {
         const value = Math.floor(diffSeconds / DAY);
         const unit = value === 1 ? "day" : "days";
-        return `Completed ${value} ${unit} ago`;
+        return `${prefix}${value} ${unit} ago`;
     }
 
     if (diffSeconds < YEAR) {
         const value = Math.floor(diffSeconds / MONTH);
         const unit = value === 1 ? "month" : "months";
-        return `Completed ${value} ${unit} ago`;
+        return `${prefix}${value} ${unit} ago`;
     }
 
     const value = Math.floor(diffSeconds / YEAR);
     const unit = value === 1 ? "year" : "years";
-    return `Completed ${value} ${unit} ago`;
+    return `${prefix}${value} ${unit} ago`;
 }
 
 function getCountdownLabel(
@@ -53,7 +53,7 @@ function getCountdownLabel(
     if (isCompleted) {
         const completedAtMs = completedAt?.getTime();
         if (Number.isFinite(completedAtMs)) {
-            return formatElapsedAgo(Number(completedAtMs), nowMs);
+            return formatElapsedAgo(Number(completedAtMs), nowMs, "Completed ");
         }
         return "Completed";
     }
@@ -126,4 +126,23 @@ export function useCountdown(
         label: getCountdownLabel(dueDate, nowMs, isCompleted, completedAt),
         isExpired,
     };
+}
+
+export function useTimeAgo(date?: Date, prefix = "") {
+    const [nowMs, setNowMs] = useState(() => Date.now());
+
+    useEffect(() => {
+        const timer = window.setInterval(() => {
+            setNowMs(Date.now());
+        }, 1000);
+
+        return () => window.clearInterval(timer);
+    }, []);
+
+    const dateMs = date?.getTime();
+    if (!Number.isFinite(dateMs)) {
+        return `${prefix}-`;
+    }
+
+    return formatElapsedAgo(Number(dateMs), nowMs, prefix);
 }

@@ -24,4 +24,15 @@ dist-ssr
 *.sw?
 
 
+/*.bat
+local*
 .env*
+
+.dockerignore
+Dockerfile*
+docker-compose*.yml
+
+
+.env.gh
+.secrets
+.variables

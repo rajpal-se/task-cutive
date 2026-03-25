@@ -1,4 +1,4 @@
-import { Box, Divider, styled } from "@mui/material";
+import { Box, Divider, Tooltip, styled } from "@mui/material";
 import CalenderCard from "./calender-card";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
@@ -18,6 +18,14 @@ interface TaskCardProps {
     onEdit?: (taskId: string) => void;
     onToggleComplete?: (taskId: string, isCompleted: boolean) => void;
     isMarkingComplete?: boolean;
+}
+
+function toFullDateTimeLabel(date?: Date) {
+    const value = date?.getTime();
+    if (!Number.isFinite(value)) {
+        return "-";
+    }
+    return `${date?.toLocaleString()}`;
 }
 
 export default function TaskCard(props: TaskCardProps) {
@@ -40,6 +48,10 @@ export default function TaskCard(props: TaskCardProps) {
         completedAt,
     );
     const createdAgoLabel = useTimeAgo(createdAt, "Added ");
+    const countdownTooltip = isCompleted
+        ? toFullDateTimeLabel(completedAt)
+        : toFullDateTimeLabel(dueDate);
+    const createdTooltip = toFullDateTimeLabel(createdAt);
 
     return (
         <TaskCardContainer isCompleted={isCompleted} isExpired={isExpired}>
@@ -50,9 +62,21 @@ export default function TaskCard(props: TaskCardProps) {
                 <h3>{title}</h3>
                 <p className="description">{description}</p>
                 <div className="dates">
-                    <p>{countdownLabel}</p>
+                    <p className="date-meta date-main">
+                        <Tooltip title={countdownTooltip} arrow placement="top">
+                            <span className="date-meta-text">
+                                {countdownLabel}
+                            </span>
+                        </Tooltip>
+                    </p>
                     <Divider orientation="vertical" />
-                    <p>{createdAgoLabel}</p>
+                    <p className="date-meta">
+                        <Tooltip title={createdTooltip} arrow placement="top">
+                            <span className="date-meta-text">
+                                {createdAgoLabel}
+                            </span>
+                        </Tooltip>
+                    </p>
                 </div>
             </Box>
             <Box className="task-actions">
@@ -109,13 +133,17 @@ const TaskCardContainer = styled(Box, {
 })<{ isCompleted: boolean; isExpired: boolean }>(
     ({ isCompleted = false, isExpired = false }) => ({
         display: "flex",
+        alignItems: "stretch",
         backgroundColor: "#fff",
-        borderRadius: "8px",
-        // padding: "16px",
-        boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+        borderRadius: "12px",
+        border: "1px solid #e8e8e8",
+        padding: "6px 8px",
+        boxShadow: "0 1px 2px rgba(0, 0, 0, 0.06)",
+        gap: "8px",
 
         ".calender-card": {
-            margin: "auto 8px",
+            margin: "auto 0",
+            paddingLeft: "2px",
         },
         ".task-info": {
             flexGrow: 1,
@@ -134,6 +162,7 @@ const TaskCardContainer = styled(Box, {
                 fontSize: "15px",
                 wordSpacing: "0.3px",
                 lineHeight: "1.3",
+                minHeight: "39px",
 
                 display: "-webkit-box",
                 WebkitLineClamp: 2,
@@ -142,33 +171,53 @@ const TaskCardContainer = styled(Box, {
                 textOverflow: "ellipsis",
             },
             ".dates": {
-                fontSize: "14px",
-                display: "flex",
-                flexDirection: "row",
-                gap: "16px",
+                fontSize: "13px",
+                display: "grid",
+                gridTemplateColumns: "1fr auto 1fr",
+                alignItems: "center",
+                columnGap: "10px",
                 marginTop: "4px",
+                minWidth: 0,
 
-                ">p": {
+                ".date-meta": {
+                    display: "block",
                     padding: "0px",
                     margin: "0px",
-                    flex: 1,
-                    color: "#aaa",
+                    color: "#7d7d7d",
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                },
 
-                    "&:first-of-type": {
-                        maxWidth: "150px",
-                        color: "#888",
-                    },
+                ".date-meta-text": {
+                    display: "inline-block",
+                    maxWidth: "100%",
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    cursor: "help",
+                    verticalAlign: "bottom",
+                },
+
+                ".date-main": {
+                    color: "#5f5f5f",
+                    fontWeight: 500,
+                },
+
+                ".MuiDivider-root": {
+                    height: "16px",
                 },
             },
         },
         ".task-actions": {
             display: "flex",
             flexDirection: "column",
-            justifyContent: "space-between",
+            justifyContent: "flex-start",
             alignItems: "flex-end",
-            gap: "8px",
-            width: "80px",
+            gap: "10px",
+            width: "86px",
             flexShrink: 0,
+            padding: "4px 2px 2px 0",
 
             svg: {
                 cursor: "pointer",
@@ -176,6 +225,7 @@ const TaskCardContainer = styled(Box, {
                 fontSize: "1.6rem",
                 borderRadius: "4px",
                 position: "relative",
+                transition: "background-color 0.15s ease, color 0.15s ease",
 
                 "&:hover": {
                     backgroundColor: "#eee",
@@ -187,9 +237,9 @@ const TaskCardContainer = styled(Box, {
             },
             ">.actions": {
                 display: "flex",
-                gap: "8px",
-                // backgroundColor: "red",
-                margin: "8px auto",
+                justifyContent: "flex-end",
+                width: "100%",
+                gap: "6px",
 
                 ".edit": {
                     color: "#1976d2",
@@ -211,8 +261,6 @@ const TaskCardContainer = styled(Box, {
                 textAlign: "right",
                 fontWeight: 500,
                 gap: "4px",
-                margin: "8px 0px",
-                marginRight: "12px",
                 ...(isCompleted && { color: "#4caf50" }),
                 ...(isExpired && { color: "#d32f2f" }),
             },
@@ -239,15 +287,19 @@ const TaskCardContainer = styled(Box, {
             ".done-label": {
                 fontSize: "12px",
                 lineHeight: 1,
+                whiteSpace: "nowrap",
             },
 
             ".expired-label": {
-                fontSize: "13px",
+                fontSize: "12px",
                 lineHeight: 1,
+                whiteSpace: "nowrap",
             },
 
             ".expired-icon": {
-                fontSize: "1.2rem",
+                padding: "2px",
+                fontSize: "1.4rem",
+                borderRadius: "4px",
             },
         },
     }),

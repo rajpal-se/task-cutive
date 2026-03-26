@@ -1,7 +1,7 @@
 import { getRefreshAccessTokenApi } from "../apis";
 import { LS } from "../constants";
 
-let intervalId: NodeJS.Timeout | null = null;
+let intervalId: ReturnType<typeof setInterval> | null = null;
 
 async function refreshAccessToken(): Promise<string | null> {
     try {

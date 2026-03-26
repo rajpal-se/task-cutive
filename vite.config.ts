@@ -8,10 +8,12 @@ export default defineConfig(({ mode }) => {
     return {
         plugins: [react(), babel({ presets: [reactCompilerPreset()] })],
         server: {
-            port: 5001,
+            port: env?.VITE_DEV_SERVER_PORT
+                ? parseInt(env.VITE_DEV_SERVER_PORT)
+                : 5000,
             proxy: {
                 "/api": {
-                    target: env?.VITE_API_HOST_URL?.replace(/\/$/, ""),
+                    target: env?.VITE_DEV_API_HOST_URL?.replace(/\/$/, ""),
                     changeOrigin: true,
                     secure: false,
                     rewrite: (path) => path.replace(/^\/api/, ""),

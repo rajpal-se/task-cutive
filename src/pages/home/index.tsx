@@ -2,7 +2,6 @@ import { Box } from "@mui/material";
 import { styled } from "@mui/system";
 import AppAutoContainer from "../../components/app-auto-container";
 import { TaskTabs } from "./tabs";
-import { taskTabs } from "../../constants";
 import TabPanel from "./tab-panel";
 import { TasksTabProvider } from "../../contexts/tasks-tab";
 

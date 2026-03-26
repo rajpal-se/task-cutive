@@ -43,14 +43,6 @@ export default function Login() {
             const response = await login(data);
             const { success } = response;
 
-            if (success === false) {
-                navigate(routes.verifyEmail, {
-                    state: { email: data.email, loginFlow: true },
-                });
-                toast.success("Login Successful. Please verify your email.");
-                return;
-            }
-
             const accessToken = response?.accessToken;
             const refreshToken = response?.refreshToken;
 
@@ -60,6 +52,14 @@ export default function Login() {
 
             if (refreshToken) {
                 localStorage.setItem(LS.REFRESH_TOKEN, refreshToken);
+            }
+
+            if (success === false) {
+                navigate(routes.verifyEmail, {
+                    state: { email: data.email, loginFlow: true },
+                });
+                toast.success("Login Successful. Please verify your email.");
+                return;
             }
 
             const userData = response?.user;

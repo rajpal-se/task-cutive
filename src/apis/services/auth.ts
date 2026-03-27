@@ -18,7 +18,7 @@ export async function loginApi(payload: { email: string; password: string }) {
         // console.log(22222, response);
         const { success, data, message } = response?.data ?? {};
         if (success === true) {
-            return data;
+            return response?.data;
         }
         throw new Error(message || "Login failed");
     } catch (error: any) {

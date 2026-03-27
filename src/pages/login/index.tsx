@@ -41,10 +41,10 @@ export default function Login() {
     const onSubmit = async (data: LoginFormValues) => {
         try {
             const response = await login(data);
-            const { success } = response;
+            const { success, data: resData = {} } = response;
 
-            const accessToken = response?.accessToken;
-            const refreshToken = response?.refreshToken;
+            const accessToken = resData?.accessToken;
+            const refreshToken = resData?.refreshToken;
 
             if (accessToken) {
                 localStorage.setItem(LS.ACCESS_TOKEN, accessToken);
@@ -62,7 +62,7 @@ export default function Login() {
                 return;
             }
 
-            const userData = response?.user;
+            const userData = resData?.user;
             // console.log("User Data from Login Response:", userData, response);
             if (userData) {
                 dispatch(setUserData(userData));

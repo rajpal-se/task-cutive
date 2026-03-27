@@ -47,13 +47,10 @@ export async function verifyEmailOtpApi(payload: {
             ...payload,
             purpose: "verify-email",
         });
-        const { success, data, message } = response?.data ?? {};
+        const { success, message } = response?.data ?? {};
 
         if (success === true) {
-            return {
-                ...data,
-                message,
-            };
+            return response?.data;
         }
 
         throw new Error(message || "Email verification failed");

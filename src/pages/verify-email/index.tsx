@@ -14,6 +14,8 @@ import {
 } from "../../schemas";
 import routes from "../../router/routes";
 import { useCallback, useEffect } from "react";
+import { setUserData } from "../../store";
+import { useDispatch } from "react-redux";
 
 // type VerifyEmailLocationState = {
 //     email: string;
@@ -23,6 +25,7 @@ import { useCallback, useEffect } from "react";
 export default function VerifyEmail() {
     const navigate = useNavigate();
     const { state } = useLocation();
+    const dispatch = useDispatch();
 
     const { mutateAsync: verifyEmail, isPending } = useVerifyEmail();
 
@@ -51,17 +54,21 @@ export default function VerifyEmail() {
 
     const onSubmit = async (data: VerifyEmailFormValues) => {
         try {
-            const response = await verifyEmail(data);
+            const { data: resData, message } = await verifyEmail(data);
 
-            if (response?.accessToken) {
-                localStorage.setItem(LS.ACCESS_TOKEN, response.accessToken);
+            if (resData?.accessToken) {
+                localStorage.setItem(LS.ACCESS_TOKEN, resData.accessToken);
             }
 
-            if (response?.refreshToken) {
-                localStorage.setItem(LS.REFRESH_TOKEN, response.refreshToken);
+            if (resData?.refreshToken) {
+                localStorage.setItem(LS.REFRESH_TOKEN, resData.refreshToken);
             }
 
-            toast.success(response?.message || "Email verified successfully");
+            if (resData?.user) {
+                dispatch(setUserData(resData.user));
+            }
+
+            toast.success(message || "Email verified successfully");
             navigate(routes.home, { replace: true });
         } catch (error) {
             toast.error(

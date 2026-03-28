@@ -65,7 +65,8 @@ export async function getAllTasksApi(params?: {
         });
 
         const { success, data, message } = response?.data ?? {};
-
+        // console.log("API Response:", { success, data, message });
+        // data.tasks = data.tasks.slice(0, 1);
         if (success === true) {
             return data as TasksListResponse;
         }

@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 
 function formatElapsedAgo(fromMs: number, nowMs: number, prefix = "") {
-    const diffSeconds = Math.max(0, Math.floor((nowMs - fromMs) / 1000));
+    const rawDiffSeconds = Math.floor((nowMs - fromMs) / 1000);
+    const isFuture = rawDiffSeconds < 0;
+    const diffSeconds = Math.abs(rawDiffSeconds);
 
     const MINUTE = 60;
     const HOUR = 60 * MINUTE;
@@ -12,36 +14,48 @@ function formatElapsedAgo(fromMs: number, nowMs: number, prefix = "") {
     if (diffSeconds < MINUTE) {
         const value = Math.max(1, diffSeconds);
         const unit = value === 1 ? "sec" : "secs";
-        return `${prefix}${value} ${unit} ago`;
+        return isFuture
+            ? `${prefix}in ${value} ${unit}`
+            : `${prefix}${value} ${unit} ago`;
     }
 
     if (diffSeconds < HOUR) {
         const value = Math.floor(diffSeconds / MINUTE);
         const unit = value === 1 ? "min" : "mins";
-        return `${prefix}${value} ${unit} ago`;
+        return isFuture
+            ? `${prefix}in ${value} ${unit}`
+            : `${prefix}${value} ${unit} ago`;
     }
 
     if (diffSeconds < DAY) {
         const value = Math.floor(diffSeconds / HOUR);
         const unit = value === 1 ? "hour" : "hours";
-        return `${prefix}${value} ${unit} ago`;
+        return isFuture
+            ? `${prefix}in ${value} ${unit}`
+            : `${prefix}${value} ${unit} ago`;
     }
 
     if (diffSeconds < MONTH) {
         const value = Math.floor(diffSeconds / DAY);
         const unit = value === 1 ? "day" : "days";
-        return `${prefix}${value} ${unit} ago`;
+        return isFuture
+            ? `${prefix}in ${value} ${unit}`
+            : `${prefix}${value} ${unit} ago`;
     }
 
     if (diffSeconds < YEAR) {
         const value = Math.floor(diffSeconds / MONTH);
         const unit = value === 1 ? "month" : "months";
-        return `${prefix}${value} ${unit} ago`;
+        return isFuture
+            ? `${prefix}in ${value} ${unit}`
+            : `${prefix}${value} ${unit} ago`;
     }
 
     const value = Math.floor(diffSeconds / YEAR);
     const unit = value === 1 ? "year" : "years";
-    return `${prefix}${value} ${unit} ago`;
+    return isFuture
+        ? `${prefix}in ${value} ${unit}`
+        : `${prefix}${value} ${unit} ago`;
 }
 
 function getCountdownLabel(

@@ -48,6 +48,7 @@ export default function TaskCard(props: TaskCardProps) {
         completedAt,
     );
     const createdAgoLabel = useTimeAgo(createdAt, "Added ");
+
     const countdownTooltip = isCompleted
         ? toFullDateTimeLabel(completedAt)
         : toFullDateTimeLabel(dueDate);

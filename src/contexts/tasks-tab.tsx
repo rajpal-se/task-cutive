@@ -9,7 +9,7 @@ import {
 import { taskTabs } from "../constants";
 
 export const TasksTabContext = createContext({
-    tab: taskTabs[0],
+    tab: taskTabs[1],
     setTab: (_tabId: string) => {},
 });
 
